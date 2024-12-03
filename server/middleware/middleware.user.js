@@ -1,23 +1,25 @@
-const jwt = require('jsonwebtoken');
-const asyncHandler = require('express-async-handler');
-const user = require('../models/model.user');
+const jwt = require("jsonwebtoken");
 
+// Verify JWT Token
+const verifyToken = (req, res, next) => {
+  const token = req.cookies.access_token;
+  if (!token) return res.status(401).json({ message: "Access denied. No token provided." });
 
-const protect =  (req, res, next) => {
-    const accesstoken = req.cookies.accessToken;
-    if(!accesstoken) {
-        return res.status(401).json({message: 'Not authorized, token is required'});
-    }else{
-        jwt.verify(accesstoken, process.env.JWT_SECRET, (err, decoded) => {
-            if(err) {
-                return res.status(403).json({valid : false ,message: 'Token is invalid'});
-            }
-            req.user = decoded.id; // Set user id to req
-            next();
-        });
-    }
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    req.user = decoded; 
+    next();
+  } catch (err) {
+    return res.status(403).json({ message: "Invalid or expired token." });
+  }
+};
 
+// Check if the user is an Admin
+const isAdmin = (req, res, next) => {
+  if (req.user.role !== "admin") {
+    return res.status(403).json({ message: "Access denied. Admins only." });
+  }
+  next();
+};
 
-}
-
-module.exports ={protect}
+module.exports = { verifyToken, isAdmin };
