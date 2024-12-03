@@ -1,19 +1,20 @@
 const express = require("express");
-const app = express();
-const cors = require('cors')
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 
 require('dotenv').config();
-const port = process.env.PORT;
 require("./config/mongoose.config");
+const userRoutes = require("./routes/routes.user");  // Import the router
+
+const app = express();
+const port = process.env.PORT;
+
 app.use(express.json(), express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 
+// User router
+app.use("/api/users", userRoutes);  
 
-
-app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
-
-
-//const AllMyQuizRoutes = require("./routes/routes.quiz");
-//AllMyQuizRoutes(app);
-
-app.listen(port, () => console.log(`Listening on port: ${port}`) );
+app.listen(port, () => console.log(`Listening on port: ${port}`));
