@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 
 require('dotenv').config();
 require("./config/mongoose.config");
-const userRoutes = require("./routes/routes.user");  // Import the router
+const userRoutes = require("./routes/routes.user");  
 
 const app = express();
 const port = process.env.PORT;

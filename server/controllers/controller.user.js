@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const asyncHandler = require("express-async-handler");
 
-// Register User
+// Register 
 module.exports.register = asyncHandler(async (req, res) => {
   const { firstName, lastName, email, password, role } = req.body;
 
@@ -16,7 +16,7 @@ module.exports.register = asyncHandler(async (req, res) => {
   res.status(201).json({ message: "User registered successfully", user: newUser });
 });
 
-// Login User
+// Login 
 module.exports.login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -34,7 +34,7 @@ module.exports.login = asyncHandler(async (req, res) => {
     .json({ message: "Logged in successfully", user: { id: user._id, role: user.role } });
 });
 
-// Logout User
+// Logout 
 module.exports.logout = asyncHandler(async (req, res) => {
     console.log("Cookies received:", req.cookies);
   res.clearCookie("access_token").status(200).json({ message: "Logged out successfully" });
