@@ -32,7 +32,7 @@ router.get(
         secure: process.env.NODE_ENV === "production",
         maxAge: 3600000,
       })
-      .redirect("http://localhost:3000/dashboard"); // Redirect to the frontend dashboard
+      .redirect("http://localhost:3000/dashboard"); // Redirect to the frontend dashboard (change it)
   }
 );
 

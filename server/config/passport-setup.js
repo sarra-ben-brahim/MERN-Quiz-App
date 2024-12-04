@@ -1,9 +1,9 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const User = require('../models/model.user'); // Ensure the correct path to your User model
+const User = require('../models/model.user'); 
 const jwt = require('jsonwebtoken');
 
-// Replace these with environment variables for security
+
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "895008070474-gmt0juck2a2m0kem73tkviir3ibmrh4r.apps.googleusercontent.com";
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || "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";
 const GOOGLE_CALLBACK_URL = process.env.GOOGLE_CALLBACK_URL || "http://localhost:8000/api/users/google/callback";
