@@ -5,15 +5,15 @@ const UserSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
-      required: [true, "{PATH} First name is required"],
+      required: [function() { return !this.googleId; }, "{PATH} is required "]
     },
     lastName: {
       type: String,
-      required: [true, " {PATH} Last name is required"],
+      required: [function() { return !this.googleId; }, "{PATH} is required "],
     },
     email: {
       type: String,
-      required: [true, " {PATH} Email is required"],
+      required: [true, " {PATH} is required"],
       unique: true,
       validate: {
         validator: (val) => /^([\w-.]+@([\w-]+\.)+[\w-]+)?$/.test(val),
@@ -22,14 +22,22 @@ const UserSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: [true, " {PATH} Password is required"],
+      required: [function() { return !this.googleId; }, "{PATH} Password is required "],
       minlength: [8, " {PATH} Password must be 8 characters or longer"],
     },
-    role: {
+    role: { 
       type: String,
       enum: ["user", "admin"],
       default: "user",
     },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true // allows multiple null values
+    },
+    googleToken: {
+      type: String
+    }
   },
   { timestamps: true }
 );

@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const { auth } = require("express-openid-connect");
+const session = require('express-session');
+const passport = require('./config/passport-setup');
 require("dotenv").config();
 require("./config/mongoose.config");
 
@@ -15,6 +17,20 @@ app.use(express.json(), express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 
+// Session middleware (required for Passport)
+app.use(session({
+    secret: process.env.SECRET_KEY,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { 
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
+  }));
+  
+  // Initialize Passport
+  app.use(passport.initialize());
+  app.use(passport.session());
 
 // Routes
 app.use("/api/users", userRoutes);
