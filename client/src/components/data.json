@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "name": "JavaScript",
+    "description": "Test your knowledge of JavaScript!",
+    "level": "Beginner",
+    "questionsCount": 10,
+    "image": "https://via.placeholder.com/300x200.png?text=JavaScript+Quiz"
+  },
+  {
+    "id": 2,
+    "name": "Java",
+    "description": "How well do you know Java?",
+    "level": "Intermediate",
+    "questionsCount": 15,
+    "image": "https://via.placeholder.com/300x200.png?text=Java+Quiz"
+  },
+  {
+    "id": 3,
+    "name": "PHP",
+    "description": "Challenge yourself with PHP!",
+    "level": "Advanced",
+    "questionsCount": 20,
+    "image": "https://via.placeholder.com/300x200.png?text=PHP+Quiz"
+  },
+  {
+    "id": 4,
+    "name": "Python",
+    "description": "Explore the world of Python programming.",
+    "level": "Intermediate",
+    "questionsCount": 12,
+    "image": "https://via.placeholder.com/300x200.png?text=Python+Quiz"
+  },
+  {
+    "id": 5,
+    "name": "C++",
+    "description": "How much do you know about C++?",
+    "level": "Advanced",
+    "questionsCount": 18,
+    "image": "https://via.placeholder.com/300x200.png?text=C++"
+  },
+  {
+    "id": 6,
+    "name": "Ruby",
+    "description": "Test your knowledge of Ruby programming!",
+    "level": "Beginner",
+    "questionsCount": 10,
+    "image": "https://via.placeholder.com/300x200.png?text=Ruby+Quiz"
+  },
+  {
+    "id": 7,
+    "name": "HTML & CSS",
+    "description": "How well do you know HTML and CSS?",
+    "level": "Beginner",
+    "questionsCount": 15,
+    "image": "https://via.placeholder.com/300x200.png?text=HTML+CSS+Quiz"
+  },
+  {
+    "id": 8,
+    "name": "Swift",
+    "description": "Explore Swift for iOS development.",
+    "level": "Intermediate",
+    "questionsCount": 14,
+    "image": "https://via.placeholder.com/300x200.png?text=Swift+Quiz"
+  }
+]

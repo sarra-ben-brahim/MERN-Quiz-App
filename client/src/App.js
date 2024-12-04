@@ -1,25 +1,64 @@
-import logo from './logo.svg';
-import './App.css';
+// App.js
+import { Route, Routes, Navigate } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import React, { useContext } from "react";
+import Login from "./components/Login";
+import { AuthProvider, AuthContext } from "./components/context/AuthContext";
+import Register from "./components/Register";
+import ProtectedRoute from "./components/context/ProtectedRoute";
+import Stats from "./components/Stats";
+import QuizList from "./components/quizzes/QuizList";
+import Main from "./components/Main";
+import StartQuiz from "./components/quizzes/StartQuiz";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthProvider>
+      <Navbar />
+      <MainRoutes />
+    </AuthProvider>
   );
 }
+
+const MainRoutes = () => {
+  const { isAuthenticated } = useContext(AuthContext);
+
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={isAuthenticated ? <Navigate to="/main" /> : <Login />}
+      />
+      <Route path="/register" element={<Register />} />
+      <Route
+        path="/main"
+        element={
+          <ProtectedRoute>
+            <Main>
+              <QuizList />
+            </Main>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/stats"
+        element={
+          <ProtectedRoute>
+            <Stats />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/start-quiz"
+        element={
+          <ProtectedRoute>
+            <StartQuiz />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
+  );
+};
 
 export default App;
