@@ -15,4 +15,4 @@ router.get("/admin", [verifyToken, isAdmin], (req, res) => {
   res.status(200).json({ message: "Welcome, Admin!" });
 });
 
-module.exports = router;  
+module.exports = router;
