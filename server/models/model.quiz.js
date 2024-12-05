@@ -17,7 +17,7 @@ const questionSchema = new mongoose.Schema({
     type: {
         type: String,
         required: [true, "Type is required"],
-        enum: ["Multiple Choice", "True/False", "Short Answer"],
+        enum: ["Multiple Choice", "True/False", "Short Answer", "Single Choice"],
     },
     correctAnswer: {
         type: String,
