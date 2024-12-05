@@ -2,6 +2,59 @@ const Quiz = require("../models/model.quiz");
 const multer = require("multer");
 const path = require("path");
 const QuizResult = require("../models/model.quizresults");
+
+// Add a Question to a Quiz
+module.exports.addQuestionToQuiz = (req, res) => {
+  Quiz.findOneAndUpdate(
+      { _id: req.params.quizId },
+      { $push: { questions: req.body } }, // Add the question to the `questions` array
+      { new: true, runValidators: true }
+  )
+      .then((updatedQuiz) => res.json({ Quiz: updatedQuiz }))
+      .catch((err) => res.status(400).json(err));
+};
+
+// Get All Questions of a Quiz
+module.exports.getQuestionsFromQuiz = (req, res) => {
+  Quiz.findOne({ _id: req.params.quizId })
+      .then((quiz) => {
+          if (!quiz) {
+              return res.status(404).json({ message: "Quiz not found" });
+          }
+          res.json(quiz.questions);
+      })
+      .catch((err) => res.status(400).json(err));
+};
+
+// Update a Specific Question
+module.exports.updateQuestionInQuiz = (req, res) => {
+  Quiz.findOneAndUpdate(
+      { _id: req.params.quizId, "questions._id": req.params.questionId },
+      {
+          $set: {
+              "questions.$": req.body, // Update the specific question
+          },
+      },
+      { new: true, runValidators: true }
+  )
+      .then((updatedQuiz) => res.json({ Quiz: updatedQuiz }))
+      .catch((err) => res.status(400).json(err));
+};
+
+// Delete a Specific Question
+module.exports.deleteQuestionFromQuiz = (req, res) => {
+  Quiz.findOneAndUpdate(
+      { _id: req.params.quizId },
+      { $pull: { questions: { _id: req.params.questionId } } }, // Remove the question by ID
+      { new: true }
+  )
+      .then((updatedQuiz) => res.json({ Quiz: updatedQuiz }))
+      .catch((err) => res.status(400).json(err));
+};
+
+
+
+
 // create quiz results
 module.exports.saveQuizResult = (req, res) => {
   const { userId, quizId, score, timeSpent, correctAnswers, totalQuestions } = req.body;
