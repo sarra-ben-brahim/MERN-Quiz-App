@@ -14,7 +14,7 @@ const App = () => {
   };
 
   return (
-    <div style={styles.container}>
+    <div>
       <h1>Welcome to the Quiz App</h1>
       <GoogleLoginButton />
     </div>
