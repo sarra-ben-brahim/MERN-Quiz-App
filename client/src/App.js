@@ -7,7 +7,7 @@ const App = () => {
     };
 
     return (
-      <button onClick={handleGoogleLogin} style={styles.button}>
+      <button onClick={handleGoogleLogin}>
         Login with Google
       </button>
     );
@@ -21,25 +21,5 @@ const App = () => {
   );
 };
 
-// Styling for the button and container
-const styles = {
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    height: "100vh",
-    backgroundColor: "#f0f0f0",
-  },
-  button: {
-    padding: "10px 20px",
-    backgroundColor: "#4285F4",
-    color: "#fff",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-    fontSize: "16px",
-  },
-};
 
 export default App;

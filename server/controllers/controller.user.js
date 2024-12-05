@@ -3,6 +3,55 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const asyncHandler = require("express-async-handler");
 
+
+//find all users
+module.exports.findALLUser = (req, res) => {
+  User.find()
+    .then((User) => {
+      res.json(User);   
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+      
+    });
+};
+
+//find one user by email
+module.exports.findOneSingleUser = (req, res) => {
+  User.findOne({ email: req.params.email })
+    .then((oneSingleUser) => {
+      res.json(oneSingleUser );
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+};
+
+// find one user by id
+module.exports.findOneSingleUserById = (req, res) => {
+  User.findOne({ _id: req.params.id })
+    .then((oneSingleUser) => {
+      res.json(oneSingleUser );
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+};
+
+// update user by id
+module.exports.updateExistingUser = (req, res) => {
+  User.findOneAndUpdate({ _id: req.params.id }, req.body, {
+    new: true,
+    runValidators: true,
+  })
+    .then((updatedUser) => {
+      res.json({ User: updatedUser });
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+};
+
 // Register 
 module.exports.register = asyncHandler(async (req, res) => {
   const { firstName, lastName, email, password, role } = req.body;
