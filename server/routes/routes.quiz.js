@@ -20,5 +20,7 @@ module.exports = (app) => {
     //update user
     app.patch("/api/user/:id", UserController.updateExistingUser);
 
-
+    //quiz results
+    app.post("/api/quiz-results", QuizController.saveQuizResult);
+    app.get("/api/quiz-results/user/:userId", QuizController.getUserQuizResults);
 }

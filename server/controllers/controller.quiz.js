@@ -1,6 +1,31 @@
 const Quiz = require("../models/model.quiz");
 const multer = require("multer");
 const path = require("path");
+const QuizResult = require("../models/model.quizresults");
+// create quiz results
+module.exports.saveQuizResult = (req, res) => {
+  const { userId, quizId, score, timeSpent, correctAnswers, totalQuestions } = req.body;
+
+  QuizResult.create({ userId, quizId, score, timeSpent, correctAnswers, totalQuestions })
+    .then((quizResult) => {
+      res.status(201).json({ message: "Quiz saved ", quizResult });
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+};
+
+//get quiz results
+module.exports.getUserQuizResults = (req, res) => {
+  QuizResult.find({ userId: req.params.userId })
+    .populate("quizId", "name")
+    .then((results) => {
+      res.status(200).json(results);
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+};
 
 
 const storage = multer.diskStorage({
