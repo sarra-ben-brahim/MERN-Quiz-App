@@ -7,7 +7,7 @@ const QuizResult = require("../models/model.quizresults");
 module.exports.addQuestionToQuiz = (req, res) => {
   Quiz.findOneAndUpdate(
       { _id: req.params.quizId },
-      { $push: { questions: req.body } }, // Add the question to the `questions` array
+      { $push: { questions: req.body } }, 
       { new: true, runValidators: true }
   )
       .then((updatedQuiz) => res.json({ Quiz: updatedQuiz }))
@@ -32,7 +32,7 @@ module.exports.updateQuestionInQuiz = (req, res) => {
       { _id: req.params.quizId, "questions._id": req.params.questionId },
       {
           $set: {
-              "questions.$": req.body, // Update the specific question
+              "questions.$": req.body, 
           },
       },
       { new: true, runValidators: true }
@@ -45,7 +45,7 @@ module.exports.updateQuestionInQuiz = (req, res) => {
 module.exports.deleteQuestionFromQuiz = (req, res) => {
   Quiz.findOneAndUpdate(
       { _id: req.params.quizId },
-      { $pull: { questions: { _id: req.params.questionId } } }, // Remove the question by ID
+      { $pull: { questions: { _id: req.params.questionId } } }, 
       { new: true }
   )
       .then((updatedQuiz) => res.json({ Quiz: updatedQuiz }))

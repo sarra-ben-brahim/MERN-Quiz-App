@@ -25,9 +25,9 @@ module.exports = (app) => {
     app.get("/api/quiz-results/user/:userId", QuizController.getUserQuizResults);
 
     // Question Routes
-    app.post("/api/quizzes/:quizId/questions", quizController.addQuestionToQuiz);
-    app.get("/api/quizzes/:quizId/questions", quizController.getQuestionsFromQuiz);
-    app.put("/api/quizzes/:quizId/questions/:questionId",quizController.updateQuestionInQuiz);
-    app.delete("/api/quizzes/:quizId/questions/:questionId",quizController.deleteQuestionFromQuiz);
+    app.post("/api/quizzes/:quizId/questions", QuizController.addQuestionToQuiz);
+    app.get("/api/quizzes/:quizId/questions", QuizController.getQuestionsFromQuiz);
+    app.put("/api/quizzes/:quizId/questions/:questionId",QuizController.updateQuestionInQuiz);
+    app.delete("/api/quizzes/:quizId/questions/:questionId",QuizController.deleteQuestionFromQuiz);
 
 }
