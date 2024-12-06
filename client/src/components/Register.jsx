@@ -1,10 +1,14 @@
 import { useRef, useState, useEffect } from "react";
-import axios from '../../api/axios';
-import { Link } from "react-router-dom";
+import axios from '../api/axios';
+//import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+
 
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { TextField, Button, Container, Typography, Box, Grid2 } from '@mui/material';
+import { Link } from '@mui/material';
+
 
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
@@ -13,6 +17,9 @@ const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 const REGISTER_URL = 'http://localhost:8000/api/users/register';
 
 const Register = () => {
+
+  const navigate = useNavigate();
+
   const userRef = useRef();
   const errRef = useRef();
 
@@ -63,7 +70,7 @@ const Register = () => {
 
   useEffect(() => {
     setErrMsg('');
-  }, [firstName, lastName,email, pwd, matchPwd])
+  }, [firstName, lastName, email, pwd, matchPwd])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -78,13 +85,15 @@ const Register = () => {
     }
     try {
       const response = await axios.post(REGISTER_URL,
-        { firstName : firstName,
-          lastName : lastName, 
-          email : email, 
-          password : pwd}
-        
+        {
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          password: pwd
+        }
+
       );
-     
+
       setSuccess(true);
       //clear state and controlled inputs
       setFirstName('');
@@ -92,6 +101,7 @@ const Register = () => {
       setEmail('');
       setPwd('');
       setMatchPwd('');
+      navigate('/add-quizz');
     } catch (err) {
       if (!err?.response) {
         setErrMsg('No Server Response');
@@ -99,7 +109,7 @@ const Register = () => {
         setErrMsg('Username Taken');
       } else if (err.response?.status === 404) {
         setErrMsg('Email already exists');
-      }else {
+      } else {
         setErrMsg('Registration Failed')
       }
       errRef.current.focus();
@@ -130,7 +140,12 @@ const Register = () => {
                 borderRadius: 2,
               }}
             >
-              <Typography variant="h5">Sign Up</Typography>
+              <Typography
+                color="primary"
+                align="center"
+                gutterBottom={true}
+                variant="h5"
+              >Sign Up to test your skills</Typography>
               <form onSubmit={handleSubmit} noValidate>
                 <Grid2 container spacing={2}>
                   <Grid2 xs={12}>
@@ -185,7 +200,6 @@ const Register = () => {
                       value={lastName}
                       onFocus={() => setLastNameFocus(true)}
                       onBlur={() => setLastNameFocus(false)}
-                      autoFocus
                     />
                     <p id="uidnote" className={lastNameFocus && lastName && !validLastName ? "instructions" : "offscreen"}>
                       <FontAwesomeIcon icon={faInfoCircle} />
@@ -216,14 +230,13 @@ const Register = () => {
                       value={email}
                       onFocus={() => setEmailFocus(true)}
                       onBlur={() => setEmailFocus(false)}
-                      autoFocus
                     />
                     <p id="uidnote" className={emailFocus && email && !validEmail ? "instructions" : "offscreen"}>
                       <FontAwesomeIcon icon={faInfoCircle} />
                       Must be valid.<br />
                     </p>
                   </Grid2>
-                  <Grid2  xs={12}>
+                  <Grid2 xs={12}>
                     <span>
                       <FontAwesomeIcon icon={faCheck} className={validPwd ? "valid" : "hide"} />
                       <FontAwesomeIcon icon={faTimes} className={validPwd || !pwd ? "hide" : "invalid"} />
@@ -236,6 +249,7 @@ const Register = () => {
                       onChange={(e) => setPwd(e.target.value)}
                       value={pwd}
                       required
+                      fullWidth
                       aria-invalid={validPwd ? "false" : "true"}
                       aria-describedby="pwdnote"
                       onFocus={() => setPwdFocus(true)}
@@ -248,7 +262,7 @@ const Register = () => {
                       Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
                     </p>
                   </Grid2>
-                  <Grid2  xs={12}>
+                  <Grid2 xs={12}>
                     <span>
                       <FontAwesomeIcon icon={faCheck} className={validMatch && matchPwd ? "valid" : "hide"} />
                       <FontAwesomeIcon icon={faTimes} className={validMatch || !matchPwd ? "hide" : "invalid"} />
@@ -261,6 +275,7 @@ const Register = () => {
                       onChange={(e) => setMatchPwd(e.target.value)}
                       value={matchPwd}
                       required
+                      fullWidth
                       aria-invalid={validMatch ? "false" : "true"}
                       aria-describedby="confirmnote"
                       onFocus={() => setMatchFocus(true)}
@@ -273,7 +288,7 @@ const Register = () => {
                   </Grid2>
                 </Grid2>
                 <Button
-                  disabled={ !validPwd || !validMatch ? true : false}
+                  disabled={!validPwd || !validMatch ? true : false}
                   type="submit"
                   fullWidth
                   variant="contained"
@@ -282,6 +297,15 @@ const Register = () => {
                   Sign Up
                 </Button>
               </form>
+              <Typography
+                color="primary"
+                align="center"
+                gutterBottom={true}
+                variant="p"
+              > Already registered?
+
+                <Link href="/signIn" style={{ color: 'blue', textDecoration: 'underline' }}>Sign In</Link>
+              </Typography>
             </Box>
           </Container>
 
