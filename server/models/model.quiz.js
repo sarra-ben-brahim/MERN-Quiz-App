@@ -6,10 +6,21 @@ const questionSchema = new mongoose.Schema({
         minlength: [5, "Question must be at least 5 characters long"],
     },
     options: {
-        type: [String],
+        type: [
+            {
+                text: {
+                    type: String,
+                    required: [true, "Option text is required"],
+                },
+                isCorrect: {
+                    type: Boolean,
+                    default: false,
+                },
+            },
+        ],
         validate: {
             validator: function (val) {
-                return val.length >= 2; 
+                return val.length >= 2;
             },
             message: "At least two options are required",
         },
@@ -18,16 +29,6 @@ const questionSchema = new mongoose.Schema({
         type: String,
         required: [true, "Type is required"],
         enum: ["Multiple Choice", "True/False", "Short Answer", "Single Choice"],
-    },
-    correctAnswer: {
-        type: String,
-        required: [true, "Correct answer is required"],
-        validate: {
-            validator: function (val) {
-                return this.options.includes(val); 
-            },
-            message: "Correct answer must be one of the options",
-        },
     },
 });
 const quizSchema = new mongoose.Schema({

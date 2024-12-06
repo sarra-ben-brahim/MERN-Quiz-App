@@ -80,7 +80,7 @@ module.exports.login = asyncHandler(async (req, res) => {
   res
     .cookie("access_token", token, { httpOnly: true, secure: process.env.NODE_ENV === "production",maxAge: 3600000, })
     .status(200)
-    .json({ message: "Logged in successfully", user: { id: user._id, role: user.role } });
+    .json({ message: "Logged in successfully", user: { id: user._id, role: user.role },token, });
 });
 
 // Logout 
