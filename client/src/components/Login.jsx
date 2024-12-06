@@ -3,19 +3,27 @@ import { login } from '../api/login';
 import { useNavigate } from 'react-router-dom'
 import { TextField, Button, Container, Typography, Box, Grid2 } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useAuth } from "./context/AuthProvider";
 
-
+const LOGIN_URL = 'http://localhost:8000/api/users/login';
 
 const Login = () => {
+
+    const [credentials, setCredentials] = useState({ username: "", password: "" });
+    const { login } = useAuth();
+
     const navigate = useNavigate()
 
     const emailRef = useRef();
     const errRef = useRef();
 
+    const [firstName, setFirstName] = useState('');
     const [email, setEmail] = useState('');
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
+    const [error, setError] = useState("");
+
 
     useEffect(() => {
         emailRef.current.focus();
@@ -29,10 +37,30 @@ const Login = () => {
         e.preventDefault();
 
         try {
+            const response = await fetch(LOGIN_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(credentials),
+            });
+
+            if (!response.ok) {
+                throw new Error("Invalid login credentials");
+            }
+        
+            const data = await response.json();
+            login(data.token); // Store token in AuthContext
+            navigate("/dashboard");
+        } catch (err) {
+            setError(err.message);
+        }
+
+        try {
             const token = await login(email, pwd);
             console.log('Token received:', token);
             errRef.current.focus();
-            navigate('/add-quizz');
+            //navigate('/add-quizz');
 
         } catch (err) {
             console.error('Login failed');
@@ -72,6 +100,16 @@ const Login = () => {
                                 variant="h5"
                             >Login</Typography>
                             <form onSubmit={handleSubmit}>
+                                <TextField
+                                    label="Username"
+                                    fullWidth
+                                    margin="normal"
+                                    value={firstName}
+                                    style={{ visibility: 'hidden' }}
+                                    onChange={(e) =>
+                                        setCredentials({ ...credentials, username: e.target.value })
+                                    }
+                                />
                                 <Grid2 container spacing={2}>
                                     <Grid2 xs={12}>
                                         <TextField
@@ -85,6 +123,7 @@ const Login = () => {
                                             fullWidth
                                             label="Email"
                                             name="email"
+                                            variant="outlined"
                                         />
                                     </Grid2>
                                     <Grid2 xs={12}>
@@ -105,7 +144,7 @@ const Login = () => {
                                     fullWidth
                                     variant="contained"
                                     component={Link}
-                                    to="/main"
+                                    to="/add-quizz"
                                     sx={{ mt: 3, mb: 2 }}
                                 >
                                     Login

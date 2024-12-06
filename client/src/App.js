@@ -1,25 +1,37 @@
 import React, { useContext } from "react";
-import { AuthProvider, AuthContext } from "./components/context/AuthContext";
-import ProtectedRoute from "./components/context/ProtectedRoute";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Register from "./components/Register";
 import Login from "./components/Login";
 import CreateQuizz from "./components/CreateQuizz"
 import UpdateQuizz from "./components/UpdateQuizz"
 import Navbar from "./components/Navbar";
 import Main from "./components/Main";
-
-import { Navigate, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from "./components/context/AuthProvider";
+import ProtectedRoute from "./components/context/ProtectedRoute";
 
 
 function App() {
 
   return (
+    <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/add-quizz" element={<CreateQuizz />} />
+
+        </Routes>
+    </AuthProvider>
+  );
+
+  /*return (
     <Routes>
       <Route path="/add-quizz" element={<CreateQuizz />} />
       <Route path="/edit-quizz" element={<UpdateQuizz />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
     </Routes>
 
-  )
+  )*/
 }
 
 /* return (
