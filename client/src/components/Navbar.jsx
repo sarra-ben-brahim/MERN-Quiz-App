@@ -7,7 +7,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import QuizIcon from "@mui/icons-material/Quiz";
 const Navbar = () => {
   const { isAuthenticated, username, logout } = useContext(AuthContext); // use the context
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
   const location = useLocation();
   const isActive = (path) => location.pathname === path;
   console.log(username);

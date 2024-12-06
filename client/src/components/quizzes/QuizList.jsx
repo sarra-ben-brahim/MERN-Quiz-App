@@ -31,6 +31,7 @@ const QuizList = ({ quizzes, itemsPerPage = 4, onStart }) => {
               level={quiz.level}
               questionsCount={quiz.questionsCount}
               image={quiz.image}
+              id={quiz.id}
               onStart={() => onStart(quiz.id)}
             />
           </Grid2>

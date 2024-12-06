@@ -1,16 +1,20 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import QuizList from "../components/quizzes/QuizList"; //
-import data from "./data.json";
+
 import { useState, useEffect } from "react";
+import axiosInstance from "./config/axiosApi";
 
 const Main = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [selectedQuizId, setSelectedQuizId] = useState(null);
 
   useEffect(() => {
-    // Simulate data from API requests
-    setQuizzes(data);
+    // Simulate data from Json server
+    axiosInstance
+      .get("/quizzes")
+      .then((response) => setQuizzes(response.data))
+      .catch((error) => console.error(error));
   }, []);
 
   const handleStartQuiz = (quizId) => {

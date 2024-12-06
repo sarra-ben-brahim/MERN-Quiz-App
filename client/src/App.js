@@ -10,12 +10,16 @@ import Stats from "./components/Stats";
 import QuizList from "./components/quizzes/QuizList";
 import Main from "./components/Main";
 import StartQuiz from "./components/quizzes/StartQuiz";
+import { QuizProvider } from "./components/context/QuizContext";
+import Results from "./components/quizzes/Results";
 
 function App() {
   return (
     <AuthProvider>
-      <Navbar />
-      <MainRoutes />
+      <QuizProvider>
+        <Navbar />
+        <MainRoutes />
+      </QuizProvider>
     </AuthProvider>
   );
 }
@@ -49,13 +53,23 @@ const MainRoutes = () => {
         }
       />
       <Route
-        path="/start-quiz"
+        path="/start-quiz/:id"
         element={
           <ProtectedRoute>
             <StartQuiz />
           </ProtectedRoute>
         }
       />
+
+      <Route
+        path="/results"
+        element={
+          <ProtectedRoute>
+            <Results />
+          </ProtectedRoute>
+        }
+      />
+
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

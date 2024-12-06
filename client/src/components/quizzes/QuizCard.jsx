@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { getLevelColor } from "../config/Utils"; // import color function from getLevelColor
 import {
   Card,
@@ -9,12 +9,32 @@ import {
   Button,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../config/axiosApi";
 
-const QuizCard = ({ name, description, level, questionsCount, image }) => {
+const QuizCard = ({ name, description, level, questionsCount, image, id }) => {
   const navigate = useNavigate();
+  //const { id } = useParams();
+  const [total, setTotal] = useState(0);
 
-  const handleStart = () => {
-    navigate("/start-quiz");
+  useEffect(() => {
+    axiosInstance
+      .get(`http://localhost:5000/quizzes/${id}`)
+
+      .then((response) => {
+        console.log(response.data.numberOfQuestions);
+        setTotal(response.data.numberOfQuestions); // set total number of questions to state
+      })
+
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
+
+  const handleStart = (id) => {
+    console.log(total); // get total number of questions from questionsCount prop
+    navigate(`/start-quiz/${id}`, {
+      state: { totalQuestion: total },
+    });
   };
 
   return (
@@ -89,7 +109,7 @@ const QuizCard = ({ name, description, level, questionsCount, image }) => {
                 backgroundColor: "#1565c0",
               },
             }}
-            onClick={handleStart}
+            onClick={() => handleStart(id)}
           >
             Start Quiz
           </Button>
