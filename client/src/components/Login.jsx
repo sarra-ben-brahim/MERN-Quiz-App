@@ -1,7 +1,8 @@
 import { useRef, useState, useEffect, useContext } from 'react';
-import  { login } from '../api/login'; 
+import { login } from '../api/login';
 import { useNavigate } from 'react-router-dom'
-import { TextField, Button, Container, Typography, Box, Grid2, Link } from '@mui/material';
+import { TextField, Button, Container, Typography, Box, Grid2 } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 
 
@@ -33,7 +34,7 @@ const Login = () => {
             errRef.current.focus();
             navigate('/add-quizz');
 
-        }catch (err) {
+        } catch (err) {
             console.error('Login failed');
         }
     }
@@ -69,7 +70,7 @@ const Login = () => {
                                 align="center"
                                 gutterBottom={true}
                                 variant="h5"
-                            >Sign In</Typography>
+                            >Login</Typography>
                             <form onSubmit={handleSubmit}>
                                 <Grid2 container spacing={2}>
                                     <Grid2 xs={12}>
@@ -103,9 +104,11 @@ const Login = () => {
                                     type="submit"
                                     fullWidth
                                     variant="contained"
+                                    component={Link}
+                                    to="/main"
                                     sx={{ mt: 3, mb: 2 }}
                                 >
-                                    Sign In
+                                    Login
                                 </Button>
                             </form>
                             <Typography
