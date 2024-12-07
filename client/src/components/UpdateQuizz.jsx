@@ -98,7 +98,7 @@ const UpdateQuizz = () => {
     >
       <Paper sx={{ padding: 3, width: '100%', maxWidth: 500 }}>
         <Typography variant="h6" gutterBottom textAlign={"center"}>
-          Create Quizz
+          Update Quiz
         </Typography>
 
         <form onSubmit={handleSubmit}>

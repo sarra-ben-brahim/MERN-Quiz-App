@@ -1,8 +1,8 @@
-//import { UserContext } from "./UserContext";
+/*//import { UserContext } from "./UserContext";
 import React, { useContext } from "react";
 import { AppBar, Toolbar, Button, Typography, Box } from "@mui/material";
 import { Link } from "react-router-dom";
-import { AuthContext } from "./context/AuthContext";
+//import { AuthContext } from "./context/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
 import QuizIcon from "@mui/icons-material/Quiz";
 const Navbar = () => {
@@ -124,3 +124,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+*/

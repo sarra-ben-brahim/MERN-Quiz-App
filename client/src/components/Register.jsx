@@ -45,7 +45,6 @@ const Register = () => {
   const [matchFocus, setMatchFocus] = useState(false);
 
   const [errMsg, setErrMsg] = useState('');
-  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     userRef.current.focus();
@@ -94,7 +93,6 @@ const Register = () => {
 
       );
 
-      setSuccess(true);
       //clear state and controlled inputs
       setFirstName('');
       setLastName('');
@@ -118,199 +116,189 @@ const Register = () => {
 
   return (
     <>
-      {success ? (
-        <section>
-          <h1>Success!</h1>
-          <p>
-            <a href="#">Sign In</a>
-          </p>
-        </section>
-      ) : (
-        <section>
-          <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-          <Container component="main" maxWidth="xs">
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                marginTop: 8,
-                padding: 3,
-                border: '1px solid #ddd',
-                borderRadius: 2,
-              }}
-            >
-              <Typography
-                color="primary"
-                align="center"
-                gutterBottom={true}
-                variant="h5"
-              >Sign Up to test your skills</Typography>
-              <form onSubmit={handleSubmit} noValidate>
-                <Grid2 container spacing={2}>
-                  <Grid2 xs={12}>
-                    <span>
-                      <FontAwesomeIcon icon={faCheck} className={validFirstName ? "valid" : "hide"} />
-                      <FontAwesomeIcon icon={faTimes} className={validFirstName || !firstName ? "hide" : "invalid"} />
-                    </span>
 
-                    <TextField
+      <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+      <Container component="main" maxWidth="xs">
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            marginTop: 8,
+            padding: 3,
+            border: '1px solid #ddd',
+            borderRadius: 2,
+          }}
+        >
+          <Typography
+            color="primary"
+            align="center"
+            gutterBottom={true}
+            variant="h5"
+          >Sign Up to test your skills</Typography>
+          <form onSubmit={handleSubmit} noValidate>
+            <Grid2 container spacing={2}>
+              <Grid2 xs={12}>
+                <span>
+                  <FontAwesomeIcon icon={faCheck} className={validFirstName ? "valid" : "hide"} />
+                  <FontAwesomeIcon icon={faTimes} className={validFirstName || !firstName ? "hide" : "invalid"} />
+                </span>
 
-                      type="text"
-                      ref={userRef}
-                      autoComplete="off"
-                      onChange={(e) => setFirstName(e.target.value)}
-                      aria-invalid={firstName ? "false" : "true"}
-                      aria-describedby="uidnote"
-                      variant="outlined"
-                      required
-                      fullWidth
-                      label="First Name"
-                      name="firstName"
-                      value={firstName}
-                      onFocus={() => setFirstNameFocus(true)}
-                      onBlur={() => setFirstNameFocus(false)}
-                      autoFocus
-                    />
-                    <p id="uidnote" className={firstNameFocus && firstName && !validFirstName ? "instructions" : "offscreen"}>
-                      <FontAwesomeIcon icon={faInfoCircle} />
-                      4 to 24 characters.<br />
-                      Must begin with a letter.<br />
-                      Letters, numbers, underscores, hyphens allowed.
-                    </p>
-                  </Grid2>
-                  <Grid2 xs={12}>
-                    <span>
-                      <FontAwesomeIcon icon={faCheck} className={validLastName ? "valid" : "hide"} />
-                      <FontAwesomeIcon icon={faTimes} className={validLastName || !lastName ? "hide" : "invalid"} />
-                    </span>
+                <TextField
 
-                    <TextField
-                      type="text"
-                      ref={userRef}
-                      autoComplete="off"
-                      onChange={(e) => setLastName(e.target.value)}
-                      aria-invalid={lastName ? "false" : "true"}
-                      aria-describedby="uidnote"
-                      variant="outlined"
-                      required
-                      fullWidth
-                      label="Last Name"
-                      name="lastName"
-                      value={lastName}
-                      onFocus={() => setLastNameFocus(true)}
-                      onBlur={() => setLastNameFocus(false)}
-                    />
-                    <p id="uidnote" className={lastNameFocus && lastName && !validLastName ? "instructions" : "offscreen"}>
-                      <FontAwesomeIcon icon={faInfoCircle} />
-                      4 to 24 characters.<br />
-                      Must begin with a letter.<br />
-                      Letters, numbers, underscores, hyphens allowed.
-                    </p>
-                  </Grid2>
-                  <Grid2 xs={12}>
-                    <span>
-                      <FontAwesomeIcon icon={faCheck} className={validEmail ? "valid" : "hide"} />
-                      <FontAwesomeIcon icon={faTimes} className={validEmail || !email ? "hide" : "invalid"} />
-                    </span>
-
-                    <TextField
-
-                      type="text"
-                      ref={userRef}
-                      autoComplete="off"
-                      onChange={(e) => setEmail(e.target.value)}
-                      aria-invalid={email ? "false" : "true"}
-                      aria-describedby="uidnote"
-                      variant="outlined"
-                      required
-                      fullWidth
-                      label="Email"
-                      name="email"
-                      value={email}
-                      onFocus={() => setEmailFocus(true)}
-                      onBlur={() => setEmailFocus(false)}
-                    />
-                    <p id="uidnote" className={emailFocus && email && !validEmail ? "instructions" : "offscreen"}>
-                      <FontAwesomeIcon icon={faInfoCircle} />
-                      Must be valid.<br />
-                    </p>
-                  </Grid2>
-                  <Grid2 xs={12}>
-                    <span>
-                      <FontAwesomeIcon icon={faCheck} className={validPwd ? "valid" : "hide"} />
-                      <FontAwesomeIcon icon={faTimes} className={validPwd || !pwd ? "hide" : "invalid"} />
-                    </span>
-                    <TextField
-                      type="password"
-                      id="password"
-                      label="Password"
-                      name="pwd"
-                      onChange={(e) => setPwd(e.target.value)}
-                      value={pwd}
-                      required
-                      fullWidth
-                      aria-invalid={validPwd ? "false" : "true"}
-                      aria-describedby="pwdnote"
-                      onFocus={() => setPwdFocus(true)}
-                      onBlur={() => setPwdFocus(false)}
-                    />
-                    <p id="pwdnote" className={pwdFocus && !validPwd ? "instructions" : "offscreen"}>
-                      <FontAwesomeIcon icon={faInfoCircle} />
-                      8 to 24 characters.<br />
-                      Must include uppercase and lowercase letters, a number and a special character.<br />
-                      Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
-                    </p>
-                  </Grid2>
-                  <Grid2 xs={12}>
-                    <span>
-                      <FontAwesomeIcon icon={faCheck} className={validMatch && matchPwd ? "valid" : "hide"} />
-                      <FontAwesomeIcon icon={faTimes} className={validMatch || !matchPwd ? "hide" : "invalid"} />
-                    </span>
-                    <TextField
-                      type="password"
-                      id="confirm_pwd"
-                      label="Confirm Password"
-                      name="matchPwd"
-                      onChange={(e) => setMatchPwd(e.target.value)}
-                      value={matchPwd}
-                      required
-                      fullWidth
-                      aria-invalid={validMatch ? "false" : "true"}
-                      aria-describedby="confirmnote"
-                      onFocus={() => setMatchFocus(true)}
-                      onBlur={() => setMatchFocus(false)}
-                    />
-                    <p id="confirmnote" className={matchFocus && !validMatch ? "instructions" : "offscreen"}>
-                      <FontAwesomeIcon icon={faInfoCircle} />
-                      Must match the first password input field.
-                    </p>
-                  </Grid2>
-                </Grid2>
-                <Button
-                  disabled={!validPwd || !validMatch ? true : false}
-                  type="submit"
+                  type="text"
+                  ref={userRef}
+                  autoComplete="off"
+                  onChange={(e) => setFirstName(e.target.value)}
+                  aria-invalid={firstName ? "false" : "true"}
+                  aria-describedby="uidnote"
+                  variant="outlined"
+                  required
                   fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Sign Up
-                </Button>
-              </form>
-              <Typography
-                color="primary"
-                align="center"
-                gutterBottom={true}
-                variant="p"
-              > Already registered?
+                  label="First Name"
+                  name="firstName"
+                  value={firstName}
+                  onFocus={() => setFirstNameFocus(true)}
+                  onBlur={() => setFirstNameFocus(false)}
+                  autoFocus
+                />
+                <p id="uidnote" className={firstNameFocus && firstName && !validFirstName ? "instructions" : "offscreen"}>
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  4 to 24 characters.<br />
+                  Must begin with a letter.<br />
+                  Letters, numbers, underscores, hyphens allowed.
+                </p>
+              </Grid2>
+              <Grid2 xs={12}>
+                <span>
+                  <FontAwesomeIcon icon={faCheck} className={validLastName ? "valid" : "hide"} />
+                  <FontAwesomeIcon icon={faTimes} className={validLastName || !lastName ? "hide" : "invalid"} />
+                </span>
 
-                <Link href="/signIn" style={{ color: 'blue', textDecoration: 'underline' }}>Sign In</Link>
-              </Typography>
-            </Box>
-          </Container>
+                <TextField
+                  type="text"
+                  ref={userRef}
+                  autoComplete="off"
+                  onChange={(e) => setLastName(e.target.value)}
+                  aria-invalid={lastName ? "false" : "true"}
+                  aria-describedby="uidnote"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="Last Name"
+                  name="lastName"
+                  value={lastName}
+                  onFocus={() => setLastNameFocus(true)}
+                  onBlur={() => setLastNameFocus(false)}
+                />
+                <p id="uidnote" className={lastNameFocus && lastName && !validLastName ? "instructions" : "offscreen"}>
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  4 to 24 characters.<br />
+                  Must begin with a letter.<br />
+                  Letters, numbers, underscores, hyphens allowed.
+                </p>
+              </Grid2>
+              <Grid2 xs={12}>
+                <span>
+                  <FontAwesomeIcon icon={faCheck} className={validEmail ? "valid" : "hide"} />
+                  <FontAwesomeIcon icon={faTimes} className={validEmail || !email ? "hide" : "invalid"} />
+                </span>
 
-        </section>
-      )}
+                <TextField
+
+                  type="text"
+                  ref={userRef}
+                  autoComplete="off"
+                  onChange={(e) => setEmail(e.target.value)}
+                  aria-invalid={email ? "false" : "true"}
+                  aria-describedby="uidnote"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="Email"
+                  name="email"
+                  value={email}
+                  onFocus={() => setEmailFocus(true)}
+                  onBlur={() => setEmailFocus(false)}
+                />
+                <p id="uidnote" className={emailFocus && email && !validEmail ? "instructions" : "offscreen"}>
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  Must be valid.<br />
+                </p>
+              </Grid2>
+              <Grid2 xs={12}>
+                <span>
+                  <FontAwesomeIcon icon={faCheck} className={validPwd ? "valid" : "hide"} />
+                  <FontAwesomeIcon icon={faTimes} className={validPwd || !pwd ? "hide" : "invalid"} />
+                </span>
+                <TextField
+                  type="password"
+                  id="password"
+                  label="Password"
+                  name="pwd"
+                  onChange={(e) => setPwd(e.target.value)}
+                  value={pwd}
+                  required
+                  fullWidth
+                  aria-invalid={validPwd ? "false" : "true"}
+                  aria-describedby="pwdnote"
+                  onFocus={() => setPwdFocus(true)}
+                  onBlur={() => setPwdFocus(false)}
+                />
+                <p id="pwdnote" className={pwdFocus && !validPwd ? "instructions" : "offscreen"}>
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  8 to 24 characters.<br />
+                  Must include uppercase and lowercase letters, a number and a special character.<br />
+                  Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
+                </p>
+              </Grid2>
+              <Grid2 xs={12}>
+                <span>
+                  <FontAwesomeIcon icon={faCheck} className={validMatch && matchPwd ? "valid" : "hide"} />
+                  <FontAwesomeIcon icon={faTimes} className={validMatch || !matchPwd ? "hide" : "invalid"} />
+                </span>
+                <TextField
+                  type="password"
+                  id="confirm_pwd"
+                  label="Confirm Password"
+                  name="matchPwd"
+                  onChange={(e) => setMatchPwd(e.target.value)}
+                  value={matchPwd}
+                  required
+                  fullWidth
+                  aria-invalid={validMatch ? "false" : "true"}
+                  aria-describedby="confirmnote"
+                  onFocus={() => setMatchFocus(true)}
+                  onBlur={() => setMatchFocus(false)}
+                />
+                <p id="confirmnote" className={matchFocus && !validMatch ? "instructions" : "offscreen"}>
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  Must match the first password input field.
+                </p>
+              </Grid2>
+            </Grid2>
+            <Button
+              disabled={!validPwd || !validMatch ? true : false}
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign Up
+            </Button>
+          </form>
+          <Typography
+            color="primary"
+            align="center"
+            gutterBottom={true}
+            variant="p"
+          > Already registered?
+
+            <Link href="/login" style={{ color: 'blue', textDecoration: 'underline' }}>Sign In</Link>
+          </Typography>
+        </Box>
+      </Container>
+
     </>
   )
 }

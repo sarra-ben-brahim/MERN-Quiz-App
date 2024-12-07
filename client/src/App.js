@@ -7,20 +7,32 @@ import CreateQuizz from "./components/CreateQuizz"
 import UpdateQuizz from "./components/UpdateQuizz"
 import Navbar from "./components/Navbar";
 import Main from "./components/Main";
-import { AuthProvider } from "./components/context/AuthProvider";
-import ProtectedRoute from "./components/context/ProtectedRoute";
+import Layout from "./components/Layout";
+import Missing from "./components/Missing";
+import RequireAuth from "./components/RequireAuth";
+import Unauthorized from "./components/Unauthorized";
 
 
 function App() {
 
   return (
-    <AuthProvider>
-        <Routes>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        {/* public routes*/}
           <Route path="/login" element={<Login />} />
-          <Route path="/add-quizz" element={<CreateQuizz />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="unauthorized" element={<Unauthorized />} />
 
-        </Routes>
-    </AuthProvider>
+        {/* protected routes */}
+        {/*<Route element={<RequireAuth allowedRole={'admin'} />}>*/}
+          <Route path="/add-quizz" element={<CreateQuizz />} />
+          <Route path="/edit-quizz" element={<UpdateQuizz />} />
+        {/*</Route>*/}
+
+        {/* catch all */}
+        <Route path="*" element={<Missing />} />
+      </Route>
+    </Routes>
   );
 
   /*return (

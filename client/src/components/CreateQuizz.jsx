@@ -167,6 +167,7 @@ const CreateQuizz = () => {
         )}
       </Paper>
     </Box>
+
   );
 }
 export default CreateQuizz
