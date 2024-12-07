@@ -1,132 +1,77 @@
-import React, { useState } from "react";
-import axios from "axios";
+// App.js
+import { Route, Routes, Navigate } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import React, { useContext } from "react";
+import Login from "./components/Login";
+import { AuthProvider, AuthContext } from "./components/context/AuthContext";
+import Register from "./components/Register";
+import ProtectedRoute from "./components/context/ProtectedRoute";
+import Stats from "./components/Stats";
+import QuizList from "./components/quizzes/QuizList";
+import Main from "./components/Main";
+import StartQuiz from "./components/quizzes/StartQuiz";
+import { QuizProvider } from "./components/context/QuizContext";
+import Results from "./components/quizzes/Results";
 
-const App = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    level: "Beginner",
-    questionsCount: 1,
-  });
-  const [image, setImage] = useState(null); 
-  const [errors, setErrors] = useState({});
-  const [message, setMessage] = useState("");
+function App() {
+  return (
+    <AuthProvider>
+      <QuizProvider>
+        <Navbar />
+        <MainRoutes />
+      </QuizProvider>
+    </AuthProvider>
+  );
+}
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleImageChange = (e) => {
-    setImage(e.target.files[0]); 
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const formDataWithImage = new FormData();
-    formDataWithImage.append("name", formData.name);
-    formDataWithImage.append("description", formData.description);
-    formDataWithImage.append("level", formData.level);
-    formDataWithImage.append("questionsCount", formData.questionsCount);
-
-    if (image) {
-      formDataWithImage.append("image", image); 
-    }
-
-    try {
-      const response = await axios.post("http://localhost:8000/api/quiz", formDataWithImage, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      setMessage("Quiz created successfully!");
-      setErrors({}); 
-      setFormData({ name: "", description: "", level: "Beginner", questionsCount: 1 });
-      setImage(null); 
-    } catch (err) {
-      if (err.response && err.response.data.errors) {
-        setErrors(err.response.data.errors);
-      } else {
-        setMessage("An error occurred. Please try again.");
-      }
-    }
-  };
+const MainRoutes = () => {
+  const { isAuthenticated } = useContext(AuthContext);
 
   return (
-    <div className="create-quiz-container">
-      <h1>Create Quiz</h1>
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <div className="form-group">
-          <label>Quiz Name:</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="form-input"
-          />
-          {errors.name && <p className="error-message">{errors.name.message}</p>}
-        </div>
+    <Routes>
+      <Route
+        path="/"
+        element={isAuthenticated ? <Navigate to="/main" /> : <Login />}
+      />
+      <Route path="/register" element={<Register />} />
+      <Route
+        path="/main"
+        element={
+          <ProtectedRoute>
+            <Main>
+              <QuizList />
+            </Main>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/stats"
+        element={
+          <ProtectedRoute>
+            <Stats />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/start-quiz/:id"
+        element={
+          <ProtectedRoute>
+            <StartQuiz />
+          </ProtectedRoute>
+        }
+      />
 
-        <div className="form-group">
-          <label>Description:</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            className="form-input"
-          />
-          {errors.description && <p className="error-message">{errors.description.message}</p>}
-        </div>
+      <Route
+        path="/results/:id"
+        element={
+          <ProtectedRoute>
+            <Results />
+          </ProtectedRoute>
+        }
+      />
 
-        <div className="form-group">
-          <label>Level:</label>
-          <select
-            name="level"
-            value={formData.level}
-            onChange={handleChange}
-            className="form-input"
-          >
-            <option value="Beginner">Beginner</option>
-            <option value="Intermediate">Intermediate</option>
-            <option value="Advanced">Advanced</option>
-          </select>
-          {errors.level && <p className="error-message">{errors.level.message}</p>}
-        </div>
-
-        <div className="form-group">
-          <label>Questions Count:</label>
-          <input
-            type="number"
-            name="questionsCount"
-            value={formData.questionsCount}
-            onChange={handleChange}
-            className="form-input"
-          />
-          {errors.questionsCount && <p className="error-message">{errors.questionsCount.message}</p>}
-        </div>
-
-        <div className="form-group">
-          <label>Quiz Image:</label>
-          <input
-            type="file"
-            accept="image/jpeg, image/png"
-            onChange={handleImageChange}
-            className="form-input"
-          />
-          {errors.image && <p className="error-message">{errors.image.message}</p>}
-        </div>
-
-        <button type="submit" className="submit-button">
-          Create Quiz
-        </button>
-      </form>
-
-      {message && <p className="success-message">{message}</p>}
-    </div>
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
   );
 };
 

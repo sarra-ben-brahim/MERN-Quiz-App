@@ -8,7 +8,7 @@ module.exports = (app) => {
     // Quiz routes
     app.get("/api/quiz",QuizController.findALLQuiz);
     app.get("/api/quiz/:id", QuizController.findOneSingleQuiz);
-    app.post("/api/quiz",[verifyToken, isAdmin],QuizController.createNewQuiz);
+    app.post("/api/quiz",QuizController.createNewQuiz);
     app.patch("/api/quiz/:id",[verifyToken, isAdmin], QuizController.updateExistingQuiz);
     app.delete("/api/quiz/:id",[verifyToken, isAdmin], QuizController.deleteAnExistingQuiz);
 
@@ -25,7 +25,7 @@ module.exports = (app) => {
     app.get("/api/quiz-results/user/:userId", QuizController.getUserQuizResults);
 
     // Question Routes
-    app.post("/api/quiz/:quizId/questions",[verifyToken, isAdmin], QuizController.addQuestionToQuiz);
+    app.post("/api/quiz/:quizId/questions", QuizController.addQuestionToQuiz);
     app.get("/api/quiz/:quizId/questions", QuizController.getQuestionsFromQuiz);
     app.patch("/api/quiz/:quizId/questions/:questionId",[verifyToken, isAdmin],QuizController.updateQuestionInQuiz);
     app.delete("/api/quiz/:quizId/questions/:questionId",[verifyToken, isAdmin],QuizController.deleteQuestionFromQuiz);
