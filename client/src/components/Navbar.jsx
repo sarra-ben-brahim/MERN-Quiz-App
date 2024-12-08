@@ -5,8 +5,9 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "./context/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
 import QuizIcon from "@mui/icons-material/Quiz";
+import RequireAuth from "./RequireAuth";
 const Navbar = () => {
-  const { isAuthenticated, username, logout } = useContext(AuthContext); // use the context
+  const { isAuthenticated, username, firstName, logout } = useContext(AuthContext); // use the context
   const navigate = useNavigate();
   const location = useLocation();
   const isActive = (path) => location.pathname === path;
@@ -58,7 +59,7 @@ const Navbar = () => {
                     textTransform: "capitalize",
                   }}
                 >
-                  Welcome, {username}!
+                  Welcome, {firstName}!
                 </Typography>
               )}
 
@@ -76,6 +77,9 @@ const Navbar = () => {
                     to="/stats"
                   >
                     Stats
+                  </Button>
+                  <Button component={Link} to="/add-quiz">
+                    Add Quiz
                   </Button>
                   <Button variant="text" color="inherit" onClick={handleLogout}>
                     Log Out

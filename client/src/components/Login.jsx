@@ -45,10 +45,10 @@ const Login = () => {
           withCredentials: true
         }
       );
-      console.log(JSON.stringify(response?.data));
       const accessToken = response?.data?.token;
       const user = response?.data?.user;
-      login(user.id, accessToken);
+      const firstName = response?.data?.firstName;
+      login(firstName, accessToken);
       setEmail('');
       setPassword('');
       navigate(from, { replace: true });

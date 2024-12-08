@@ -12,8 +12,10 @@ import Main from "./components/Main";
 import StartQuiz from "./components/quizzes/StartQuiz";
 import { QuizProvider } from "./components/context/QuizContext";
 import Results from "./components/quizzes/Results";
-import CreateQuizz from "./components/quizzes/CreateQuiz";
-import UpdateQuizz from "./components/quizzes/UpdateQuizz";
+import CreateQuiz from "./components/admin/CreateQuiz";
+import UpdateQuiz from "./components/admin/UpdateQuiz";
+import RequireAuth from "./components/RequireAuth";
+import Dashboard from "./components/admin/Dashboard";
 
 function App() {
   return (
@@ -34,7 +36,12 @@ const MainRoutes = () => {
       <Route
         path="/"
         element={isAuthenticated ? <Navigate to="/main" /> : <Login />}
-      />
+      >
+      </Route>
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/add-quiz" element={<CreateQuiz />} />
+      <Route path="/dashboard/edit-quiz/:id" element={<UpdateQuiz />} />
+
       <Route path="/register" element={<Register />} />
       <Route
         path="/main"
@@ -46,6 +53,18 @@ const MainRoutes = () => {
           </ProtectedRoute>
         }
       />
+      {/* we want to protect these routes */}
+      <Route element={<RequireAuth allowedRole='admin' />}>
+        <Route
+          path="/add-quiz"
+          element={
+            <ProtectedRoute>
+              <CreateQuiz />
+            </ProtectedRoute>
+          }
+        />
+
+      </Route>
       <Route
         path="/stats"
         element={
@@ -54,19 +73,22 @@ const MainRoutes = () => {
           </ProtectedRoute>
         }
       />
+
       <Route
-        path="/add-quiz"
+        path="/dashboard"
         element={
           <ProtectedRoute>
-            <CreateQuizz />
+            <Dashboard />
           </ProtectedRoute>
         }
       />
+
+
       <Route
         path="/edit-quiz"
         element={
           <ProtectedRoute>
-            <UpdateQuizz />
+            <UpdateQuiz />
           </ProtectedRoute>
         }
       />
@@ -87,7 +109,6 @@ const MainRoutes = () => {
         }
       />
 
-      <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
 };

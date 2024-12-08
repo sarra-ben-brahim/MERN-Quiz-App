@@ -1,41 +1,49 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, useParams, Link } from 'react-router-dom'
-import { Box, Button, TextField, Typography, Paper } from '@mui/material';
-import { Select, MenuItem, InputLabel, FormControl, FormHelperText } from '@mui/material';
+import { useParams, useNavigate } from "react-router-dom";
+import { Box, Button, TextField, Typography, Paper } from "@mui/material";
+import { Select, MenuItem, InputLabel, FormControl } from "@mui/material";
 
-const UpdateQuizz = () => {
+const UpdateQuiz = () => {
+  const { id } = useParams(); // Get the quiz ID from the URL
+  console.log("Quiz ID:", id);
+
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     level: "Beginner",
     questionsCount: 1,
   });
-  const { id } = useParams()
-  const [name, setName] = useState("")
-  const [description, setDescription] = useState("")
-  const [level, setLevel] = useState("")
-  const [questionsCount, setQuestionsCount] = useState(0)
+
   const [image, setImage] = useState(null);
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState('');
-  const [selectedValue, setSelectedValue] = useState('');
+  const [successMessage, setSuccessMessage] = useState("");
+  const token = localStorage.getItem("token"); // Retrieve token from localStorage
 
   useEffect(() => {
-    axios.get(`http://localhost:8000/api/quiz/${id}`)
-      .then(res => {
-        console.log(res.data)
-        setName(res.data.name);
-        setDescription(res.data.description);
-        setQuestionsCount(res.data.questionsCount);
+    // Fetch existing quiz data
 
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }, [id])
+    const fetchQuizData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8000/api/quiz/${id}`);
+        const quiz = response.data;
+        setFormData({
+          name: quiz.name,
+          description: quiz.description,
+          level: quiz.level,
+          questionsCount: quiz.questionsCount,
+        });
+      } catch (err) {
+        console.error("Error fetching quiz data:", err);
+        setMessage("Failed to load quiz details.");
+      }
+    };
 
+    fetchQuizData();
+  }, [id]);
 
   const handleChange = (e) => {
     setFormData({
@@ -43,10 +51,6 @@ const UpdateQuizz = () => {
       [e.target.name]: e.target.value,
     });
   };
-
-  const handleSelectChange = (event) => {
-    setSelectedValue(event.target.value);
-  }
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
@@ -66,17 +70,22 @@ const UpdateQuizz = () => {
     }
 
     try {
-      const response = await axios.patch(`http://localhost:8000/api/quiz/${id}`, formDataWithImage, {
+      const token = localStorage.getItem("token"); // Retrieve token from localStorage
+      if (!token) {
+        console.error("Token is undefined. Ensure the user is logged in.");
+        return;
+      }
+
+      await axios.patch(`http://localhost:8000/api/quiz/${id}`, formDataWithImage, {
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
-      setMessage("Quiz created successfully!");
+      setMessage("Quiz updated successfully!");
       setErrors({});
-      setFormData({ name: "", description: "", level: "Beginner", questionsCount: 1 });
-      setImage(null);
-      setSuccessMessage('Form submitted successfully!');
-
+      setSuccessMessage("Quiz updated successfully!");
+      navigate("/dashboard");
     } catch (err) {
       if (err.response && err.response.data.errors) {
         setErrors(err.response.data.errors);
@@ -89,21 +98,26 @@ const UpdateQuizz = () => {
   return (
     <Box
       sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
         padding: 2,
       }}
     >
-      <Paper sx={{ padding: 3, width: '100%', maxWidth: 500 }}>
+      <Paper sx={{ padding: 3, width: "100%", maxWidth: 500 }}>
         <Typography variant="h6" gutterBottom textAlign={"center"}>
           Update Quiz
         </Typography>
 
+        {message && (
+          <Typography color="error" sx={{ mb: 2 }}>
+            {message}
+          </Typography>
+        )}
+
         <form onSubmit={handleSubmit}>
           <InputLabel htmlFor="custom-input">Quiz Name :</InputLabel>
-
           <TextField
             name="name"
             value={formData.name}
@@ -112,8 +126,8 @@ const UpdateQuizz = () => {
             margin="normal"
             type="text"
           />
-          <Typography> {errors.name && <p className="error-message">{errors.name.message}</p>}
-          </Typography>
+          {errors.name && <Typography color="error">{errors.name.message}</Typography>}
+
           <InputLabel htmlFor="custom-input">Description :</InputLabel>
           <TextField
             name="description"
@@ -124,26 +138,22 @@ const UpdateQuizz = () => {
             multiline
             rows={2}
           />
-          <Typography>{errors.description && <p className="error-message">{errors.description.message}</p>}</Typography>
+          {errors.description && <Typography color="error">{errors.description.message}</Typography>}
+
           <InputLabel htmlFor="custom-input">Level :</InputLabel>
           <FormControl fullWidth>
-            <InputLabel id="simple-select-label">Choose an Option</InputLabel>
             <Select
-              labelId="simple-select-label"
-              value={selectedValue}
-              onChange={handleSelectChange}
-              label="Choose an Option"
-              variant="outlined"
+              value={formData.level}
+              onChange={(e) => setFormData({ ...formData, level: e.target.value })}
             >
-              <MenuItem value={"Beginner"}>Beginner</MenuItem>
-              <MenuItem value={"Intermediate"}>Intermediate</MenuItem>
-              <MenuItem value={"Advanced"}>Advanced</MenuItem>
+              <MenuItem value="Beginner">Beginner</MenuItem>
+              <MenuItem value="Intermediate">Intermediate</MenuItem>
+              <MenuItem value="Advanced">Advanced</MenuItem>
             </Select>
           </FormControl>
-          <Typography>
-            {errors.level && <p className="error-message">{errors.level.message}</p>}
-          </Typography>
-          <InputLabel htmlFor="custom-input">Number of questions :</InputLabel>
+          {errors.level && <Typography color="error">{errors.level.message}</Typography>}
+
+          <InputLabel htmlFor="custom-input">Number of Questions :</InputLabel>
           <TextField
             name="questionsCount"
             value={formData.questionsCount}
@@ -152,18 +162,18 @@ const UpdateQuizz = () => {
             margin="normal"
             type="number"
           />
-          <Typography>
-            {errors.questionsCount && <p className="error-message">{errors.questionsCount.message}</p>}
-          </Typography>
+          {errors.questionsCount && (
+            <Typography color="error">{errors.questionsCount.message}</Typography>
+          )}
+
           <InputLabel htmlFor="custom-input">Quiz Image :</InputLabel>
           <TextField
             type="file"
             accept="image/jpeg, image/png"
             onChange={handleImageChange}
           />
-          <Typography>
-            {errors.image && <p className="error-message">{errors.image.message}</p>}
-          </Typography>
+          {errors.image && <Typography color="error">{errors.image.message}</Typography>}
+
           <Button
             type="submit"
             variant="contained"
@@ -171,22 +181,18 @@ const UpdateQuizz = () => {
             fullWidth
             sx={{ mt: 2 }}
           >
-            Create Quiz
+            Update Quiz
           </Button>
         </form>
 
         {successMessage && (
-          <Typography
-            variant="body1"
-            color="green"
-            sx={{ mt: 2, textAlign: 'center' }}
-          >
+          <Typography variant="body1" color="green" sx={{ mt: 2, textAlign: "center" }}>
             {successMessage}
           </Typography>
         )}
       </Paper>
     </Box>
   );
-}
+};
 
-export default UpdateQuizz
+export default UpdateQuiz;

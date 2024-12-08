@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { Box, Button, TextField, Typography, Paper } from '@mui/material';
 import { Select, MenuItem, InputLabel, FormControl, FormHelperText } from '@mui/material';
 
@@ -11,6 +12,9 @@ const CreateQuizz = () => {
     level: "Beginner",
     questionsCount: 1,
   });
+
+  const navigate = useNavigate();
+
   const [image, setImage] = useState(null);
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
@@ -57,6 +61,7 @@ const CreateQuizz = () => {
       setFormData({ name: "", description: "", level: "Beginner", questionsCount: 1 });
       setImage(null);
       setSuccessMessage('Form submitted successfully!');
+      navigate('/dashboard')
 
     } catch (err) {
       if (err.response && err.response.data.errors) {
@@ -79,7 +84,7 @@ const CreateQuizz = () => {
     >
       <Paper sx={{ padding: 3, width: '100%', maxWidth: 500 }}>
         <Typography variant="h6" gutterBottom textAlign={"center"}>
-          Create Quizz
+          Create Quiz
         </Typography>
 
         <form onSubmit={handleSubmit}>
