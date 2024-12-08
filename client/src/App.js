@@ -12,6 +12,8 @@ import Main from "./components/Main";
 import StartQuiz from "./components/quizzes/StartQuiz";
 import { QuizProvider } from "./components/context/QuizContext";
 import Results from "./components/quizzes/Results";
+import CreateQuizz from "./components/quizzes/CreateQuiz";
+import UpdateQuizz from "./components/quizzes/UpdateQuizz";
 
 function App() {
   return (
@@ -53,6 +55,22 @@ const MainRoutes = () => {
         }
       />
       <Route
+        path="/add-quiz"
+        element={
+          <ProtectedRoute>
+            <CreateQuizz />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/edit-quiz"
+        element={
+          <ProtectedRoute>
+            <UpdateQuizz />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/start-quiz/:id"
         element={
           <ProtectedRoute>
@@ -60,7 +78,6 @@ const MainRoutes = () => {
           </ProtectedRoute>
         }
       />
-
       <Route
         path="/results/:id"
         element={
