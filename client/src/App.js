@@ -1,61 +1,99 @@
-import React from "react";
-import { useAuth0 } from "@auth0/auth0-react";
-import axios from "axios";
+import React, { useContext } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-const App = () => {
-  const { loginWithRedirect, logout, user, isAuthenticated, getAccessTokenSilently } = useAuth0();
+import Register from "./components/Register";
+import Login from "./components/Login";
+import CreateQuizz from "./components/CreateQuizz"
+import UpdateQuizz from "./components/UpdateQuizz"
+import Navbar from "./components/Navbar";
+import Main from "./components/Main";
+import Layout from "./components/Layout";
+import Missing from "./components/Missing";
+import RequireAuth from "./components/RequireAuth";
+import Unauthorized from "./components/Unauthorized";
 
-  const testAuthenticate = async () => {
-    try {
-      const response = await axios.get("http://localhost:5000/api/users/authenticate", {
-        withCredentials: true,
-      });
-      console.log(response.data);
-    } catch (error) {
-      console.error(error.response?.data || error.message);
-    }
-  };
 
-  const testProfile = async () => {
-    try {
-      const token = await getAccessTokenSilently();
-      const response = await axios.get("http://localhost:5000/api/users/profile", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      console.log(response.data);
-    } catch (error) {
-      console.error(error.response?.data || error.message);
-    }
-  };
-
-  const testAdmin = async () => {
-    try {
-      const token = await getAccessTokenSilently();
-      const response = await axios.get("http://localhost:5000/api/users/admin", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      console.log(response.data);
-    } catch (error) {
-      console.error(error.response?.data || error.message);
-    }
-  };
+function App() {
 
   return (
-    <div>
-      <h1>Auth0 React Integration</h1>
-      {!isAuthenticated ? (
-        <button onClick={() => loginWithRedirect()}>Login</button>
-      ) : (
-        <>
-          <p>Welcome, {user.name}!</p>
-          <button onClick={() => logout({ returnTo: window.location.origin })}>Logout</button>
-          <button onClick={testAuthenticate}>Test Authenticate</button>
-          <button onClick={testProfile}>Test Profile</button>
-          <button onClick={testAdmin}>Test Admin</button>
-        </>
-      )}
-    </div>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        {/* public routes*/}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="unauthorized" element={<Unauthorized />} />
+
+        {/* protected routes */}
+        {/*<Route element={<RequireAuth allowedRole={'admin'} />}>*/}
+          <Route path="/add-quizz" element={<CreateQuizz />} />
+          <Route path="/edit-quizz" element={<UpdateQuizz />} />
+        {/*</Route>*/}
+
+        {/* catch all */}
+        <Route path="*" element={<Missing />} />
+      </Route>
+    </Routes>
   );
-};
+
+  /*return (
+    <Routes>
+      <Route path="/add-quizz" element={<CreateQuizz />} />
+      <Route path="/edit-quizz" element={<UpdateQuizz />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+    </Routes>
+
+  )*/
+}
+
+/* return (
+   <AuthProvider>
+     <Navbar />
+     <MainRoutes />
+   </AuthProvider>
+ );
+}
+
+const MainRoutes = () => {
+ const { isAuthenticated } = useContext(AuthContext);
+
+ return (
+   <Routes>
+     <Route
+       path="/"
+       element={isAuthenticated ? <Navigate to="/main" /> : <Login />}
+     />
+     <Route path="/register" element={<Register />} />
+     <Route path="/login" element={<Login />} />
+     <Route
+       path="/main"
+       element={
+         <ProtectedRoute>
+           <Main>
+             
+           </Main>
+         </ProtectedRoute>
+       }
+     />
+     <Route
+       path="/add-quizz"
+       element={
+         <ProtectedRoute>
+           <CreateQuizz />
+         </ProtectedRoute>
+       }
+     />
+     <Route
+       path="/edit-quiz"
+       element={
+         <ProtectedRoute>
+           <UpdateQuizz />
+         </ProtectedRoute>
+       }
+     />
+     <Route path="*" element={<Navigate to="/" />} />
+   </Routes>
+ );
+};*/
 
 export default App;
