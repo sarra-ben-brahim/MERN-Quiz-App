@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { getLevelColor } from "../config/Utils";
 import { Card, CardContent, Typography, CardMedia, Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../config/axiosApi";
+import { AuthContext } from "../context/AuthContext";
+import axios from "../../api/axios";
 
-const QuizCard = ({ name, description, level, questionsCount, image, id }) => {
+const QuizCard = ({ name, description, level, questionsCount, image, id,onDelete }) => {
     const navigate = useNavigate();
     const [total, setTotal] = useState(0);
-
+    const { role} = useContext(AuthContext);
     useEffect(() => {
         if (id) {
             axiosInstance
                 .get(`api/quiz/${id}`)
                 .then((response) => {
-                    console.log(response.data.numberOfQuestions);
-                    setTotal(response.data.numberOfQuestions); // set total number of questions to state
-                    console.log(image)
+                    setTotal(response.data.questionsCount);
                 })
                 .catch((err) => {
                     console.error("Error fetching quiz:", err);
@@ -27,12 +27,26 @@ const QuizCard = ({ name, description, level, questionsCount, image, id }) => {
 
     const handleStart = () => {
       console.log(total); // get total number of questions from questionsCount prop
-      console.log(id);
         navigate(`/start-quiz/${id}`, {
             state: { totalQuestion: total },
             
         });
     };
+    const handleDelete = () => {
+        if (role !== 'admin') {
+          return;
+        }
+      
+        axiosInstance
+          .delete(`api/quiz/${id}`)
+          .then(() => {
+            onDelete(id); // Call the onDelete callback to update the quizzes in the parent
+          })
+          .catch((error) => {
+            console.error("Error deleting quiz:", error);
+          });
+      };
+      
 
     return (
         <Card
@@ -72,6 +86,19 @@ const QuizCard = ({ name, description, level, questionsCount, image, id }) => {
                 >
                     Start Quiz
                 </Button>
+                {role === 'admin' && (
+                    <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    sx={{ marginTop: "20px" }}
+                      onClick={() => handleDelete(id)}
+                      className="btn btn-danger"
+                    >
+                      Delete
+                    </Button>
+                    
+                  )}
             </CardContent>
         </Card>
     );

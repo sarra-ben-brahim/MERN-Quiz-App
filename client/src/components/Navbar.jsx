@@ -10,9 +10,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isActive = (path) => location.pathname === path;
-  console.log(username);
-  console.log("isAuthenticated:", isAuthenticated);
-  console.log("user:", username);
+
   // handle logout
   const handleLogout = () => {
     logout();

@@ -3,7 +3,7 @@ import { Grid2, Box, Pagination } from "@mui/material";
 import QuizCard from "./QuizCard";
 import { useState } from "react";
 
-const QuizList = ({ quizzes, itemsPerPage = 4, onStart }) => {
+const QuizList = ({ quizzes, itemsPerPage = 4, onStart , onDelete}) => {
   const [currentPage, setCurrentPage] = useState(1);
   //Calculate quizzes for current page
 
@@ -33,11 +33,12 @@ const QuizList = ({ quizzes, itemsPerPage = 4, onStart }) => {
               image={quiz.image}
               id={quiz._id}
               onStart={() => onStart(quiz.id)}
+              onDelete={() => onDelete(quiz._id)}
             />
           </Grid2>
         ))}
       </Grid2>
-        
+
       {/* Add a pagination*/}
 
       <Box

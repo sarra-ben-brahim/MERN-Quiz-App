@@ -33,7 +33,7 @@ const questionSchema = new mongoose.Schema({
     type: {
         type: String,
         required: [true, "Type is required"],
-        enum: ["Multiple Choice", "True/False", "Short Answer", "Single Choice"],
+        enum: ["Multiple", "True/False", "Short Answer", "Single"],
     },
 });
 const quizSchema = new mongoose.Schema({

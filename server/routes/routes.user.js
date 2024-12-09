@@ -26,13 +26,25 @@ router.get(
     );
 
     // Set cookie with token
-    res
-      .cookie("access_token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 3600000,
-      })
-      .redirect("http://localhost:3000/dashboard"); // Redirect to the frontend dashboard (change it)
+    res.cookie("access_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 3600000,
+    });
+
+    // Redirect to frontend dashboard
+    //res.redirect("http://localhost:3000/dashboard");
+
+ 
+    res.status(200).json({
+      message: "Logged in successfully",
+      user: {
+        id: req.user._id,
+        firstName: req.user.firstName,
+        role: req.user.role
+      },
+      token
+    });
   }
 );
 

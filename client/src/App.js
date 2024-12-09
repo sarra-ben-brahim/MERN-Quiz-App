@@ -1,25 +1,27 @@
-// App.js
 import { Route, Routes, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import React, { useContext } from "react";
 import Login from "./components/Login";
 import { AuthProvider, AuthContext } from "./components/context/AuthContext";
 import Register from "./components/Register";
-import ProtectedRoute from "./components/context/ProtectedRoute";
+
 import Stats from "./components/Stats";
 import QuizList from "./components/quizzes/QuizList";
 import Main from "./components/Main";
 import StartQuiz from "./components/quizzes/StartQuiz";
 import { QuizProvider } from "./components/context/QuizContext";
 import Results from "./components/quizzes/Results";
+import CreateQuizz from "./components/admin/CreateQuiz";
+import UpdateQuizz from "./components/admin/UpdateQuiz";
+import Dashboard from "./components/admin/Dashboard";
+import ProtectedRoute from "./components/context/ProtectedRoute";
+import Adminroute from "./components/context/Adminroute";
 
 function App() {
   return (
     <AuthProvider>
-      <QuizProvider>
         <Navbar />
         <MainRoutes />
-      </QuizProvider>
     </AuthProvider>
   );
 }
@@ -30,12 +32,12 @@ const MainRoutes = () => {
   return (
     <Routes>
       <Route
-        path="/"
+        path="/login"
         element={isAuthenticated ? <Navigate to="/main" /> : <Login />}
       />
       <Route path="/register" element={<Register />} />
       <Route
-        path="/main"
+        path="/"
         element={
           <ProtectedRoute>
             <Main>
@@ -60,7 +62,6 @@ const MainRoutes = () => {
           </ProtectedRoute>
         }
       />
-
       <Route
         path="/results/:id"
         element={
@@ -69,7 +70,30 @@ const MainRoutes = () => {
           </ProtectedRoute>
         }
       />
-
+      <Route
+        path="/add-quiz"
+        element={
+          <Adminroute>
+            <CreateQuizz />
+          </Adminroute>
+        }
+      />
+      <Route
+        path="/edit-quiz/:id"
+        element={
+          <Adminroute>
+            <UpdateQuizz />
+            </Adminroute>
+        }
+      />
+      <Route
+        path="/admin/dashboard"
+        element={
+            <Adminroute>
+              <Dashboard />
+            </Adminroute>
+        }
+      />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

@@ -9,11 +9,11 @@ module.exports = (app) => {
     app.get("/api/quiz",QuizController.findALLQuiz);
     app.get("/api/quiz/:id", QuizController.findOneSingleQuiz);
     app.post("/api/quiz",QuizController.createNewQuiz);
-    app.patch("/api/quiz/:id",[verifyToken, isAdmin], QuizController.updateExistingQuiz);
-    app.delete("/api/quiz/:id",[verifyToken, isAdmin], QuizController.deleteAnExistingQuiz);
+    app.patch("/api/quiz/:id", QuizController.updateExistingQuiz);
+    app.delete("/api/quiz/:id", QuizController.deleteAnExistingQuiz);
 
     // User routes for admin
-    app.get("/api/user",[verifyToken, isAdmin], UserController.findALLUser);
+    app.get("/api/user", UserController.findALLUser);
     app.get("/api/user/email/:email",[verifyToken, isAdmin], UserController.findOneSingleUser);
     app.get("/api/user/:id", UserController.findOneSingleUserById);
 

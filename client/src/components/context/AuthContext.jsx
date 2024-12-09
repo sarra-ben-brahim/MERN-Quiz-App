@@ -1,40 +1,55 @@
+// AuthContext.jsx
 import React, { createContext, useState, useEffect } from "react";
 
-// Create Context
 export const AuthContext = createContext();
 
-// Provider Component
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [username, setUsername] = useState("");
+  const [role, setRole] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userName = localStorage.getItem("username");
-    if (token) {
+    const userRole = localStorage.getItem("role");
+
+    if (token && userName && userRole) {
       setIsAuthenticated(true);
-      setUsername(userName);
+      setRole(userRole);
+      setIsAdmin(userRole === "admin"); // Set isAdmin based on role
     }
+
+    setLoading(false); // Set loading to false once the values are loaded
   }, []);
 
-  // logout AuthProvider
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
-    setIsAuthenticated(false);
-    setUsername("");
-  };
+  // Prevent rendering children while loading
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-  //login
-  const login = (userName, token) => {
-    localStorage.setItem("token", token);
-    localStorage.setItem("username", userName);
-    setIsAuthenticated(true);
-    setUsername(userName);
-  };
+ // logout
+ const logout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("username");
+  localStorage.removeItem("role");
+  setIsAuthenticated(false);
+  setRole("");
+  setIsAdmin(false); // Reset isAdmin when logging out
+};
 
+// login
+const login = (userName, token, role) => {
+  localStorage.setItem("token", token);
+  localStorage.setItem("username", userName);
+  localStorage.setItem("role", role);
+  setIsAuthenticated(true);
+  setRole(role);
+  setIsAdmin(role === "admin"); // Set isAdmin based on role
+  console.log("AuthProvider - Logged in:", { userName, role, isAdmin: role === "admin" });
+};
   return (
-    <AuthContext.Provider value={{ isAuthenticated, username, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, role, isAdmin ,logout,login}}>
       {children}
     </AuthContext.Provider>
   );

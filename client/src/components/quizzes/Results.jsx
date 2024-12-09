@@ -19,7 +19,7 @@ const Results = () => {
     if (answers && quizData) {
       let correctAnswers = 0;
       answers.forEach((question) => {
-        const userAnswer = answers[question.id];
+        const userAnswer = answers[question._id];
         const correctOption = question.options
           .filter((option) => option.isCorrect)
           .map((option) => option.text);
