@@ -6,9 +6,9 @@ import { useNavigate } from 'react-router-dom';
 
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { TextField, Button, Container, Typography, Box, Grid2 } from '@mui/material';
+import { TextField, Button, Container, Typography, Box, Grid2, Divider } from '@mui/material';
 import { Link } from '@mui/material';
-
+import GoogleIcon from "@mui/icons-material/Google";
 
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
@@ -113,6 +113,11 @@ const Register = () => {
       errRef.current.focus();
     }
   }
+
+  const handleGoogleRegister = () => {
+    // Redirect to your backend Google OAuth endpoint
+    window.location.href = "http://localhost:8000/api/users/google";
+  };
 
   return (
     <>
@@ -287,6 +292,22 @@ const Register = () => {
               Sign Up
             </Button>
           </form>
+          <Divider sx={{ my: 1 }}>OR</Divider>
+          <Button
+            variant="outlined"
+            color="primary"
+            startIcon={<GoogleIcon />}
+            onClick={handleGoogleRegister}
+            fullWidth
+            sx={{
+              borderRadius: "50px",
+              textTransform: "none",
+              fontWeight: "bold",
+            }}
+          >
+            Sign Up with Google
+          </Button>
+          <Divider sx={{ my: 1 }}></Divider>
           <Typography
             color="primary"
             align="center"
