@@ -7,13 +7,14 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [role, setRole] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true); 
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userName = localStorage.getItem("username");
     const userRole = localStorage.getItem("role");
-
+    const userId = localStorage.getItem("id");
     if (token && userName && userRole) {
       setIsAuthenticated(true);
       setRole(userRole);
@@ -33,16 +34,18 @@ export const AuthProvider = ({ children }) => {
   localStorage.removeItem("token");
   localStorage.removeItem("username");
   localStorage.removeItem("role");
+  localStorage.removeItem("userId");
   setIsAuthenticated(false);
   setRole("");
   setIsAdmin(false); // Reset isAdmin when logging out
 };
 
 // login
-const login = (userName, token, role) => {
+const login = (userName, token, role,userId) => {
   localStorage.setItem("token", token);
   localStorage.setItem("username", userName);
   localStorage.setItem("role", role);
+  localStorage.setItem("userId", userId);
   setIsAuthenticated(true);
   setRole(role);
   setIsAdmin(role === "admin"); // Set isAdmin based on role

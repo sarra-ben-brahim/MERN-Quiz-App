@@ -16,6 +16,7 @@ import UpdateQuizz from "./components/admin/UpdateQuiz";
 import Dashboard from "./components/admin/Dashboard";
 import ProtectedRoute from "./components/context/ProtectedRoute";
 import Adminroute from "./components/context/Adminroute";
+import Updatequestion from "./components/admin/updatequestion";
 
 function App() {
   return (
@@ -91,6 +92,14 @@ const MainRoutes = () => {
         element={
             <Adminroute>
               <Dashboard />
+            </Adminroute>
+        }
+      />
+       <Route
+        path="/edit-question/:id"
+        element={
+            <Adminroute>
+              <Updatequestion />
             </Adminroute>
         }
       />

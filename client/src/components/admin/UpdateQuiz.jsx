@@ -28,10 +28,7 @@ const UpdateQuiz = () => {
 
     const fetchQuizData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/quiz/${id}`,{headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-      },});
+        const response = await axios.get(`http://localhost:8000/api/quiz/${id}`);
         const quiz = response.data;
         setFormData({
           name: quiz.name,
@@ -73,13 +70,7 @@ const UpdateQuiz = () => {
     }
 
     try {
-      const token = localStorage.getItem("token"); // Retrieve token from localStorage
-      if (!token) {
-        console.error("Token is undefined. Ensure the user is logged in.");
-        return;
-      }
-
-      await axios.patch(`http://localhost:8000/api/quiz/${id}`, formDataWithImage, {
+      await axios.patch(`http://localhost:8000/api/quiz/${id}`, formDataWithImage,{
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

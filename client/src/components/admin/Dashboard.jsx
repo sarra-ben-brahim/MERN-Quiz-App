@@ -81,16 +81,17 @@ const Dashboard = () => {
             width: 300,
             getActions: (params) => [
                 <GridActionsCellItem
-                    icon={<Button variant="outlined">Show</Button>}
-                    label="Show"
-                //onClick={() => handleShow(params.row.id)}
-                />,
-                <GridActionsCellItem
                     icon={<Button variant="outlined">Edit</Button>}
                     label="Edit"
                     component={Link}
-                    to={`edit-quiz/${params.row.id}`}
+                    to={`/edit-quiz/${params.row.id}`}
                 />,
+                <GridActionsCellItem
+                icon={<Button variant="outlined">Edit questions</Button>}
+                label="Edit"
+                component={Link}
+                to={`/edit-question/${params.row.id}`}
+            />,
                 <GridActionsCellItem
                     icon={<Button variant="outlined" color="error">Delete</Button>}
                     label="Delete"

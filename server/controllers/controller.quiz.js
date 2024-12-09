@@ -3,6 +3,27 @@ const multer = require("multer");
 const path = require("path");
 const QuizResult = require("../models/model.quizresults");
 
+
+exports.addQuestions = async (req, res) => {
+  try {
+    const { quizId } = req.params;
+    const { questions } = req.body;
+
+    const quiz = await Quiz.findById(quizId);
+    if (!quiz) return res.status(404).json({ message: "Quiz not found" });
+
+    questions.forEach((q) => {
+      quiz.questions.push(q);
+    });
+
+    await quiz.save();
+    res.json({ message: "Questions added successfully!" });
+  } catch (err) {
+    res.status(500).json({ message: "An error occurred", error: err });
+  }
+};
+
+
 // Add a Question to a Quiz
 module.exports.addQuestionToQuiz = (req, res) => {
   Quiz.findOneAndUpdate(
@@ -80,6 +101,17 @@ module.exports.getUserQuizResults = (req, res) => {
     });
 };
 
+//Delete quiz results
+module.exports.deleteQuizResult = (req, res) => {
+  QuizResult.findByIdAndDelete({ _id: req.params.resultId })
+   .then((result) => {
+      if (!result) {
+        return res.status(404).json({ message: "Quiz result not found" });
+      }
+      res.json({ message: "Quiz result deleted successfully!" });
+    })
+   .catch((err) => res.status(500).json({ message: "An error occurred", error: err }));
+};
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {

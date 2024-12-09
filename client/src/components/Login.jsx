@@ -4,8 +4,10 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useRef, useEffect } from 'react';
-import { TextField, Button, Container, Typography, Box, Grid2, Link } from '@mui/material';
-import { Link as LinkDom, useLocation } from 'react-router-dom';
+import { TextField, Button, Container, Typography, Box, Grid2, Link, Divider } from '@mui/material';
+import GoogleIcon from '@mui/icons-material/Google';
+
+import { useLocation } from 'react-router-dom';
 
 import axios from '../api/axios';
 
@@ -53,7 +55,7 @@ const Login = () => {
       setPassword('');
       navigate(from, { replace: true });
       navigate('/edit-quizz')
-      
+
     } catch (err) {
       if (!err?.response) {
         setErrMsg('No Server Response');
@@ -74,12 +76,26 @@ const Login = () => {
     };
 
     return (
-      <button onClick={handleGoogleLogin}>
-        Login with Google
-      </button>
+      <Box sx={{ textAlign: "center", mt: 4 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<GoogleIcon />}
+          onClick={handleGoogleLogin}
+          sx={{
+            borderRadius: "50px",
+            textTransform: "none",
+            fontWeight: "bold",
+            px: 3,
+          }}
+        >
+          Sign In with Google
+        </Button>
+        <div id="google-signup-button" style={{ display: "none" }}></div>
+      </Box>
     );
   };
-   
+
   return (
 
     <>
@@ -136,13 +152,14 @@ const Login = () => {
               type="submit"
               fullWidth
               variant="contained"
-              //component={LinkDom}
-              //to="/add-quizz"
               sx={{ mt: 3, mb: 2 }}
             >
               Login
             </Button>
           </form>
+          <Divider sx={{ my: 0 }}>OR</Divider>
+          <GoogleLoginButton />
+          <Divider sx={{ my: 1 }}></Divider>
           <Typography
             color="primary"
             align="center"
@@ -151,7 +168,6 @@ const Login = () => {
           > Need an Account?
 
             <Link href="/register" style={{ color: 'blue', textDecoration: 'underline' }}>Sign Up</Link>
-            <GoogleLoginButton />
           </Typography>
         </Box>
 

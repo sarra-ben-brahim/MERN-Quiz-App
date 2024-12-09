@@ -15,7 +15,7 @@ const port = process.env.PORT;
 // Middleware
 app.use(express.json(), express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: 'http://localhost:3000'  ,methods: 'GET,POST,PUT,DELETE',}));
+app.use(cors({ credentials: true, origin: 'http://localhost:3000'  ,methods: 'GET,POST,PUT,DELETE,PATCH',}));
 app.use("/uploads", express.static("uploads"));
 // Session middleware (required for Passport)
 app.use(session({

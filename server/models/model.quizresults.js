@@ -13,19 +13,16 @@ const QuizResultSchema = new mongoose.Schema({
   },
   score: {
     type: Number,
-    required: true,
+
   },
   timeSpent: {
     type: Number, 
-    required: true,
   },
   correctAnswers: {
     type: Number,
-    required: true,
   },
   totalQuestions: {
     type: Number,
-    required: true,
   },
   dateAttempted: {
     type: Date,

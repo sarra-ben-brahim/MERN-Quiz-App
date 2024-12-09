@@ -14,7 +14,7 @@ module.exports = (app) => {
 
     // User routes for admin
     app.get("/api/user", UserController.findALLUser);
-    app.get("/api/user/email/:email",[verifyToken, isAdmin], UserController.findOneSingleUser);
+    app.get("/api/user/email/:email",UserController.findOneSingleUser);
     app.get("/api/user/:id", UserController.findOneSingleUserById);
 
     //update user
@@ -23,11 +23,14 @@ module.exports = (app) => {
     //quiz results
     app.post("/api/quiz-results", QuizController.saveQuizResult);
     app.get("/api/quiz-results/user/:userId", QuizController.getUserQuizResults);
+    app.delete("/api/quiz-results/user/:resultId", QuizController.deleteQuizResult);
+
+    
 
     // Question Routes
     app.post("/api/quiz/:quizId/questions", QuizController.addQuestionToQuiz);
     app.get("/api/quiz/:quizId/questions", QuizController.getQuestionsFromQuiz);
-    app.patch("/api/quiz/:quizId/questions/:questionId",[verifyToken, isAdmin],QuizController.updateQuestionInQuiz);
-    app.delete("/api/quiz/:quizId/questions/:questionId",[verifyToken, isAdmin],QuizController.deleteQuestionFromQuiz);
-
+    app.patch("/api/quiz/:quizId/questions/:questionId",QuizController.updateQuestionInQuiz);
+    app.delete("/api/quiz/:quizId/questions/:questionId",QuizController.deleteQuestionFromQuiz);
+    app.post("/api/quiz/:quizId/question", QuizController.addQuestions);
 }

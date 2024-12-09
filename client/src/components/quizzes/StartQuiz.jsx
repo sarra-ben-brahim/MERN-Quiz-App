@@ -13,7 +13,7 @@ import { useState, useEffect } from "react";
 import axiosInstance from "../config/axiosApi";
 import QuizTimer from "./QuizTimer";
 //import quizData from "../quizData.json";
-
+import axios from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 const StartQuiz = () => {
@@ -29,7 +29,7 @@ const StartQuiz = () => {
   // const [timeLeft, setTimeLeft] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(null);
   //const [totalTime, setTotalTime] = useState([]);
-
+  const [resultsSaved, setResultsSaved] = useState(false);
   useEffect(() => {
     axiosInstance
       .get(`api/quiz/${id}/questions`)
@@ -146,6 +146,23 @@ const StartQuiz = () => {
     setQuizFinished(true); // Marque le quiz comme terminé
     calculateScore(); // Calcule le score final
   };
+
+  const saveresults = ()=>{
+    const dataform= {
+      userId: localStorage.getItem('userId'),
+      quizId: id,
+      score: score,
+      totalQuestions: totalQuestions,
+      answeredQuestions: quizData.length,
+    }
+    console.log(dataform);
+    axios.post("/api/quiz-results", dataform)
+    .then(response => {
+      console.log(response.data);
+      setResultsSaved(true); // Set resultsSaved to true after saving results
+    })
+    
+  }
 
   const isSuccess = score === quizData.length * 10;
 
@@ -353,47 +370,50 @@ const StartQuiz = () => {
             </Box>
 
             {viewResult && (
-              <Box sx={{ marginTop: 4 }}>
-                <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-                  Quiz Summary
-                </Typography>
-                {quizData.map((question) => {
-                  const userAnswers = answers[question._id] || [];
-                  const correctAnswers = question.options
-                    .filter((option) => option.isCorrect)
-                    .map((option) => option.text);
-                  const isCorrect =
-                    correctAnswers.length === userAnswers.length &&
-                    correctAnswers.every((answer) =>
-                      userAnswers.includes(answer)
-                    );
+  <Box sx={{ marginTop: 4 }}>
+    <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+      Quiz Summary
+    </Typography>
 
-                  return (
-                    <Box key={question.id} sx={{ marginBottom: 2 }}>
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          fontWeight: "bold",
-                          color: isCorrect ? "green" : "red",
-                        }}
-                      >
-                        {question.question}
-                      </Typography>
-                      <Typography variant="body2">
-                        Your Answer : {userAnswers.join(", ")}{" "}
-                        {isCorrect ? "(Correct)" : "(Incorrect)"}
-                      </Typography>
-                      {!isCorrect && (
-                        <Typography variant="body2" sx={{ color: "red" }}>
-                          Correct Answer : {correctAnswers.join(", ")}
-                        </Typography>
-                      )}
-                    </Box>
-                  );
-                })}
-              </Box>
-            )}
+    {quizData.map((question) => {
+      const userAnswers = answers[question._id] || [];
+      const correctAnswers = question.options
+        .filter((option) => option.isCorrect)
+        .map((option) => option.text);
+      const isCorrect =
+        correctAnswers.length === userAnswers.length &&
+        correctAnswers.every((answer) => userAnswers.includes(answer));
 
+      return (
+        <Box key={question.id} sx={{ marginBottom: 2 }}>
+          <Typography
+            variant="body1"
+            sx={{
+              fontWeight: "bold",
+              color: isCorrect ? "green" : "red",
+            }}
+          >
+            {question.question}
+          </Typography>
+          <Typography variant="body2">
+            Your Answer : {userAnswers.join(", ")}{" "}
+            {isCorrect ? "(Correct)" : "(Incorrect)"}
+          </Typography>
+          {!isCorrect && (
+            <Typography variant="body2" sx={{ color: "red" }}>
+              Correct Answer : {correctAnswers.join(", ")}
+            </Typography>
+          )}
+        </Box>
+      );
+    })}
+    {!resultsSaved && (
+      <Button variant="contained" color="primary" onClick={saveresults}>
+        Save Results!
+      </Button>
+    )}
+  </Box>
+)}
             {/* Boutons */}
             <Box sx={{ marginTop: 4 }}>
               <Button variant="contained" color="primary" onClick={resetQuiz}>
