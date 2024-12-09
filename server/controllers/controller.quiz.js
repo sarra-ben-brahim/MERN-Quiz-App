@@ -91,15 +91,26 @@ module.exports.saveQuizResult = (req, res) => {
 
 //get quiz results
 module.exports.getUserQuizResults = (req, res) => {
-  QuizResult.find({ userId: req.params.userId })
+  const { userId } = req.params;
+  console.log(`Fetching results for userId: ${userId}`);
+  
+  QuizResult.find({ userId })
     .populate("quizId", "name")
     .then((results) => {
-      res.status(200).json(results);
+      const formattedResults = results.map(result => ({
+        _id: result._id,
+        quizName: result.quizId.name,
+        score: result.score,
+        totalQuestions: result.totalQuestions,
+      }));
+      console.log('Results:', formattedResults);
+      res.status(200).json(formattedResults);
     })
     .catch((err) => {
+      console.error("Error fetching quiz results:", err);
       res.status(400).json(err);
     });
-};
+};;
 
 //Delete quiz results
 module.exports.deleteQuizResult = (req, res) => {

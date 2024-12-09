@@ -25,27 +25,15 @@ router.get(
       { expiresIn: "1h" }
     );
 
-    // Set cookie with token
-    res.cookie("access_token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 3600000,
-    });
+    const redirectUrl = `http://localhost:3000/google-callback?` +
+    `token=${token}` +
+    `&userId=${req.user._id}` +
+    `&userName=${req.user.firstName}` +
+    `&userRole=${req.user.role}`;
 
-    // Redirect to frontend dashboard
-    //res.redirect("http://localhost:3000/dashboard");
-
- 
-    res.status(200).json({
-      message: "Logged in successfully",
-      user: {
-        id: req.user._id,
-        firstName: req.user.firstName,
-        role: req.user.role
-      },
-      token
-    });
-  }
+  res.redirect(redirectUrl);
+} 
+  
 );
 
 // Protected Routes

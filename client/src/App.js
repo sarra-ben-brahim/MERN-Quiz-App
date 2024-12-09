@@ -4,7 +4,6 @@ import React, { useContext } from "react";
 import Login from "./components/Login";
 import { AuthProvider, AuthContext } from "./components/context/AuthContext";
 import Register from "./components/Register";
-
 import Stats from "./components/Stats";
 import QuizList from "./components/quizzes/QuizList";
 import Main from "./components/Main";
@@ -16,13 +15,14 @@ import UpdateQuizz from "./components/admin/UpdateQuiz";
 import Dashboard from "./components/admin/Dashboard";
 import ProtectedRoute from "./components/context/ProtectedRoute";
 import Adminroute from "./components/context/Adminroute";
-import Updatequestion from "./components/admin/updatequestion";
+import EditQuizQuestions from "./components/admin/EditQuizQuestions"; // Correct import
+import GoogleLoginCallback from './components/GoogleCallback';
 
 function App() {
   return (
     <AuthProvider>
-        <Navbar />
-        <MainRoutes />
+      <Navbar />
+      <MainRoutes />
     </AuthProvider>
   );
 }
@@ -32,6 +32,7 @@ const MainRoutes = () => {
 
   return (
     <Routes>
+      <Route path="/google-callback" element={<GoogleLoginCallback />} />
       <Route
         path="/login"
         element={isAuthenticated ? <Navigate to="/main" /> : <Login />}
@@ -84,23 +85,23 @@ const MainRoutes = () => {
         element={
           <Adminroute>
             <UpdateQuizz />
-            </Adminroute>
+          </Adminroute>
         }
       />
       <Route
         path="/admin/dashboard"
         element={
-            <Adminroute>
-              <Dashboard />
-            </Adminroute>
+          <Adminroute>
+            <Dashboard />
+          </Adminroute>
         }
       />
-       <Route
-        path="/edit-question/:id"
+      <Route
+        path="/edit-question/:quizId"
         element={
-            <Adminroute>
-              <Updatequestion />
-            </Adminroute>
+          <Adminroute>
+            <EditQuizQuestions />
+          </Adminroute>
         }
       />
       <Route path="*" element={<Navigate to="/" />} />

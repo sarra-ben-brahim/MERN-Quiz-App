@@ -1,38 +1,33 @@
-// GoogleCallback.jsx
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { AuthContext } from "./context/AuthContext";
-import { useContext } from "react";
-import axios from "../api/axios";
+import React, { useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from './context/AuthContext';
 
-const GoogleCallback = () => {
+const GoogleLoginCallback = () => {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchGoogleData = async () => {
-      try {
-        // Fetch the user data and token after Google login
-        const response = await axios.get("/api/users/google/callback", {
-          withCredentials: true,
-        });
+    // Parse the token from the URL (assuming it's passed as a URL parameter)
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    const userId = urlParams.get('userId');
+    const userName = urlParams.get('userName');
+    const userRole = urlParams.get('userRole');
 
-        const { token, user } = response.data;
-
-        // Call the login function to store user data and token
-        login(user.firstName, token, user.role);
-
-        // Redirect to the desired page (e.g., dashboard)
-        navigate("/dashboard");
-      } catch (err) {
-        console.error("Google login failed", err);
-      }
-    };
-
-    fetchGoogleData();
+    if (token && userId && userName && userRole) {
+      // Use the login function from AuthContext to set authentication state
+      login(userName, token, userRole, userId);
+      
+      // Redirect to main page or dashboard
+      navigate('/');
+    } else {
+      // Handle error case
+      console.error('Missing authentication details');
+      navigate('/login');
+    }
   }, [login, navigate]);
 
-  return <div>Loading...</div>;
+  return <div>Processing Google Login...</div>;
 };
 
-export default GoogleCallback;
+export default GoogleLoginCallback;
