@@ -6,7 +6,7 @@ import { AuthContext } from "./context/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
 import QuizIcon from "@mui/icons-material/Quiz";
 const Navbar = () => {
-  const { isAuthenticated, username, logout } = useContext(AuthContext); // use the context
+  const { isAuthenticated, username, logout, isAdmin } = useContext(AuthContext); // use the context
   const navigate = useNavigate();
   const location = useLocation();
   const isActive = (path) => location.pathname === path;
@@ -58,6 +58,17 @@ const Navbar = () => {
                 >
                   Welcome, {username}!
                 </Typography>
+              )}
+              {isAuthenticated && isAdmin ? (
+                <Button variant="text"
+                  color="inherit"
+                  component={Link}
+                  to="/admin/dashboard">
+                  Dashboard
+                </Button>
+              ) : (<>
+                
+              </>
               )}
 
               {isAuthenticated ? (
