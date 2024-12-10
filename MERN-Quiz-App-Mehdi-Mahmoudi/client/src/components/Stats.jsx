@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Box, Typography, Paper, List, ListItem, ListItemText, IconButton } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  IconButton,
+  Grid,
+  Divider
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import { AuthContext } from "./context/AuthContext";
@@ -61,26 +69,73 @@ const Stats = () => {
   }
 
   return (
-    <Box sx={{ padding: 3 }}>
-      <Typography variant="h4" gutterBottom>
+    <Box sx={{ padding: 4, backgroundColor: "#f5f5f5", minHeight: "100vh" }}>
+      <Typography
+        variant="h4"
+        gutterBottom
+        sx={{ textAlign: "center", fontWeight: "bold", mb: 4 }}
+      >
         Your Quiz Results
       </Typography>
-      <Paper sx={{ padding: 2 }}>
-        <List>
+
+      {results.length === 0 ? (
+        <Typography variant="h6" color="textSecondary" align="center">
+          No quiz results yet. Start taking quizzes to see your results here!
+        </Typography>
+      ) : (
+        <Grid container spacing={3}>
           {results.map((result) => (
-            <ListItem key={result._id} secondaryAction={
-              <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(result._id)}>
-                <DeleteIcon />
-              </IconButton>
-            }>
-              <ListItemText
-                primary={`Quiz: ${result.quizName}`}
-                secondary={`Score: ${result.score} / ${result.totalQuestions * 10}`}
-              />
-            </ListItem>
+            <Grid item xs={12} sm={6} md={4} key={result._id}>
+              <Card
+                sx={{
+                  borderRadius: 2,
+                  boxShadow: 3,
+                  backgroundColor: "white",
+                  transition: "transform 0.2s",
+                  "&:hover": {
+                    transform: "scale(1.02)",
+                  },
+                }}
+              >
+                <CardContent>
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: "bold", mb: 1, color: "primary.main" }}
+                  >
+                    {result.quizName}
+                  </Typography>
+                  <Divider sx={{ mb: 2 }} />
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    <strong>Score:</strong> {result.score} /{" "}
+                    {result.totalQuestions * 10}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    <strong>Total Questions:</strong> {result.totalQuestions}
+                  </Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      mt: 3,
+                    }}
+                  >
+                    <IconButton
+                      edge="end"
+                      aria-label="delete"
+                      onClick={() => handleDelete(result._id)}
+                      sx={{
+                        color: "error.main",
+                      }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
           ))}
-        </List>
-      </Paper>
+        </Grid>
+      )}
     </Box>
   );
 };
